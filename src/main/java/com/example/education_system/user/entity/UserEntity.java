@@ -1,7 +1,7 @@
 package com.example.education_system.user.entity;
 
 
-import com.example.education_system.config.bases.BaseEntity;
+import com.example.education_system.config.audit.AuditBaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserEntity extends BaseEntity<Long> implements UserDetails {
+public class UserEntity extends AuditBaseEntity<Long> implements UserDetails {
 
 
     @Column(unique = true, nullable = false)
@@ -34,11 +33,6 @@ public class UserEntity extends BaseEntity<Long> implements UserDetails {
     private Set<UserRole> roles;
 
 
-    // private LocalDateTime createdAt;
-   /* @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }*/
 
     // Spring Security requirements
     @Override

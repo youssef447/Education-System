@@ -1,61 +1,42 @@
 package com.example.education_system.payment.entity;
 
 
-import com.example.education_system.payment.Currency;
+import com.example.education_system.config.audit.AuditBaseEntity;
 import com.example.education_system.user.entity.UserEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class PaymentEntity extends AuditBaseEntity<Long> {
 
-    @Column(nullable = false)
-    private String paymentIntentId;
-
-
-
+    @NotNull(message = "Amount is required")
     @Column(nullable = false, precision = 10, scale = 2)
-    private double amount;
-
+    private BigDecimal amount;@NotNull(message = "Amount is required")
     @Column(nullable = false)
+    @NotNull(message = "product name is required")
+    private String productName;
+
+    @NotNull(message = "currency required")
     private Currency currency;
+    private PaymentStatus status=PaymentStatus.PENDING;
 
-    @Column(nullable = false)
-    private String status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-
+    @ManyToOne
     private UserEntity user;
 
 
 
-    private LocalDateTime createdAt;
 
 
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 
 }
 

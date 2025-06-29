@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class UserResponseDto {
     private String username;
+    private String token;
     private String profileUrl;
     private UserRole role;
 }

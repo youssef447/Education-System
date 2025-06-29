@@ -1,3 +1,4 @@
+/*
 package com.example.education_system.config.security;
 
 import com.example.education_system.event.repository.EventRepository;
@@ -15,4 +16,4 @@ public class EventAccessSecurity {
                 .map(event -> event.getUser().getUsername().equals(currentUsername))
                 .orElse(false);
     }
-}
+}*/

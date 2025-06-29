@@ -1,4 +1,4 @@
-package com.example.education_system.config.bases;
+package com.example.education_system.config.audit;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.Date;
 @Setter
 @EntityListeners(AuditingEntityListener.class)
 
-public abstract class BaseEntity<ID> {
+public abstract class AuditBaseEntity<ID> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private ID id;

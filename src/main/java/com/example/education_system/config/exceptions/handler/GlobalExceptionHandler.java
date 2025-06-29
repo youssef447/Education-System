@@ -4,7 +4,8 @@ import com.example.education_system.config.exceptions.classes.NoEventFoundExcept
 import com.example.education_system.config.exceptions.classes.NoReminderFoundException;
 import com.example.education_system.config.exceptions.classes.UserAlreadyExistsException;
 import com.example.education_system.config.response.ApiResponseBody;
-import io.swagger.v3.oas.annotations.Hidden;
+import com.stripe.exception.SignatureVerificationException;
+import com.stripe.exception.StripeException;
 import org.apache.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.nio.file.AccessDeniedException;
 import java.util.stream.Collectors;
 
-@Hidden
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -76,6 +77,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentErrors(IllegalArgumentException ex) {
+        int statusCode = HttpStatus.SC_BAD_REQUEST;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(StripeException.class)
+    public ResponseEntity<?> handleStripeExceptionErrors(StripeException ex) {
+        int statusCode = HttpStatus.SC_BAD_REQUEST;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    }@ExceptionHandler(SignatureVerificationException.class)
+    public ResponseEntity<?> handleSignatureVerificationErrors(SignatureVerificationException ex) {
         int statusCode = HttpStatus.SC_BAD_REQUEST;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
         return ResponseEntity.status(statusCode).body(response);

@@ -1,3 +1,4 @@
+/*
 package com.example.education_system.config.security;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,4 +12,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @PreAuthorize("@eventAccessSecurity.isOwner(#eventId)")
 public @interface IsEventOwner {
-}
+}*/

@@ -1,3 +1,4 @@
+/*
 package com.example.education_system.config.notification;
 
 import lombok.RequiredArgsConstructor;
@@ -20,3 +21,4 @@ public class NotificationService {
         messagingTemplate.convertAndSendToUser(username, "/queue/notifications", payload);
     }
 }
+*/

@@ -1,13 +1,15 @@
 package com.example.education_system.payment.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class PaymentResponseDto {
-    private String clientSecret;
-    private String paymentIntentId;
+
     private String status;
     private String message;
+    private String sessionUrl;
 }

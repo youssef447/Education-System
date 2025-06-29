@@ -1,5 +1,6 @@
 package com.example.education_system.payment.dto;
 
+import com.example.education_system.payment.entity.Currency;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -8,12 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PaymentRequestDto {
-    private final Long userId;
+    private final String productName;
     private final Long amount;
     private final Currency currency;
+    private final Long quantity;
 }
 
 
-enum Currency {
-    EGP, USD
-}
+
