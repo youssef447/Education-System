@@ -1,10 +1,12 @@
 
-package com.example.education_system.auth;
+package com.example.education_system.auth.service;
 
-import com.example.education_system.config.exceptions.classes.UserAlreadyExistsException;
+import com.example.education_system.auth.dto.LoginResponseDto;
+import com.example.education_system.config.exceptions.classes.RegisteredAlreadyException;
+import com.example.education_system.config.exceptions.classes.UsernameAlreadyExistsException;
 import com.example.education_system.config.services.FileStorageService;
-import com.example.education_system.user.dto.RegistrationDto;
-import com.example.education_system.user.dto.UserLoginDto;
+import com.example.education_system.auth.dto.RegistrationDto;
+import com.example.education_system.auth.dto.LoginDto;
 import com.example.education_system.user.dto.UserResponseDto;
 import com.example.education_system.user.entity.UserEntity;
 import com.example.education_system.user.mapper.UserMapper;
@@ -33,10 +35,13 @@ public class AuthenticationService {
 
     @Transactional
     public UserResponseDto register(RegistrationDto request, MultipartFile imageFile) {
-
-        // if email already exists
+// if email already exists
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new RegisteredAlreadyException();
+        }
+        // if username already exists
         if (repository.existsByUsername(request.getUsername())) {
-            throw new UserAlreadyExistsException();
+            throw new UsernameAlreadyExistsException();
         }
 
         request.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -53,10 +58,10 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public LoginResponseDto login(UserLoginDto loginDto) {
-        Authentication auth = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+    public LoginResponseDto login(LoginDto loginDto) {
+        Authentication auth = new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword());
         authenticationManager.authenticate(auth);
-        String token = jwtService.generateToken(loginDto.getUsername());
+        String token = jwtService.generateToken(loginDto.getUsernameOrEmail());
         return new LoginResponseDto(token, new Date());
     }
 

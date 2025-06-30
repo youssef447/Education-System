@@ -1,4 +1,4 @@
-package com.example.education_system.user.dto;
+package com.example.education_system.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,10 +8,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserLoginDto {
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
-    private String username;
+public class LoginDto {
+    @NotBlank(message = "username/email is required")
+
+    private String usernameOrEmail;
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;

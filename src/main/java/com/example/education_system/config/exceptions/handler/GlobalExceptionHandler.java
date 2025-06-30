@@ -2,7 +2,8 @@ package com.example.education_system.config.exceptions.handler;
 
 import com.example.education_system.config.exceptions.classes.NoEventFoundException;
 import com.example.education_system.config.exceptions.classes.NoReminderFoundException;
-import com.example.education_system.config.exceptions.classes.UserAlreadyExistsException;
+import com.example.education_system.config.exceptions.classes.RegisteredAlreadyException;
+import com.example.education_system.config.exceptions.classes.UsernameAlreadyExistsException;
 import com.example.education_system.config.response.ApiResponseBody;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
@@ -54,8 +55,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(statusCode).body(response);
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<?> handleUserAlreadyExistErrors(UserAlreadyExistsException ex) {
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<?> handleUsernameAlreadyExistErrors(UsernameAlreadyExistsException ex) {
+        int statusCode = HttpStatus.SC_CONFLICT;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    }@ExceptionHandler(RegisteredAlreadyException.class)
+    public ResponseEntity<?> handleRegisteredAlreadyErrors(RegisteredAlreadyException ex) {
         int statusCode = HttpStatus.SC_CONFLICT;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
         return ResponseEntity.status(statusCode).body(response);

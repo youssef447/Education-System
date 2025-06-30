@@ -24,7 +24,7 @@ public class CurrentUserService {
 
         String username = auth.getName();
 
-        return UserEntityRepository.findByUsername(username)
+        return UserEntityRepository.findByUsernameOrEmail(username,username)
                 .orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' not found"));
     }
 

@@ -1,6 +1,6 @@
 package com.example.education_system.config.security;
 
-import com.example.education_system.auth.JwtService;
+import com.example.education_system.auth.service.JwtService;
 import com.example.education_system.user.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

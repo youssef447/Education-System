@@ -1,10 +1,12 @@
 
-package com.example.education_system.auth;
+package com.example.education_system.auth.controller;
 
 
+import com.example.education_system.auth.service.AuthenticationService;
+import com.example.education_system.auth.dto.LoginResponseDto;
 import com.example.education_system.config.response.ApiResponseBody;
-import com.example.education_system.user.dto.RegistrationDto;
-import com.example.education_system.user.dto.UserLoginDto;
+import com.example.education_system.auth.dto.RegistrationDto;
+import com.example.education_system.auth.dto.LoginDto;
 import com.example.education_system.user.dto.UserResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ApiResponseBody generateToken(@RequestBody UserLoginDto authRequest) {
+    public ApiResponseBody generateToken(@RequestBody LoginDto authRequest) {
       LoginResponseDto result=  authService.login(authRequest);
         return new ApiResponseBody("User logged in successfully", result, true);
 

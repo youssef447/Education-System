@@ -25,13 +25,13 @@ public class UserEntity extends AuditBaseEntity<Long> implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String username;
-
+    @Column(unique = true, nullable = false)
+    private String email;
     private String password;
     private String profileUrl;
 
     @Enumerated(EnumType.STRING)
-    private Set<UserRole> roles;
-
+    private Set<UserRole> roles = Set.of(UserRole.ROLE_STUDENT);
 
 
     // Spring Security requirements
