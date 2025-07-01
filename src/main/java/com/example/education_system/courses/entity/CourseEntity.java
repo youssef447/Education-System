@@ -1,5 +1,6 @@
 package com.example.education_system.courses.entity;
 
+import com.example.education_system.category.CategoryEntity;
 import com.example.education_system.config.audit.AuditBaseEntity;
 import com.example.education_system.enrollments.entity.EnrollmentEntity;
 import com.example.education_system.user.entity.UserEntity;
@@ -7,10 +8,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,18 +32,17 @@ public class CourseEntity extends AuditBaseEntity<Long> {
 
     //Relations
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "instructor_id", nullable = false)
+
     @JoinTable(
             name = "courses_instructors",
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "instructor_id")
     )
-    private List<UserEntity> instructors;
+    private Set<UserEntity> instructors;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<EnrollmentEntity> enrollments;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private Set<EnrollmentEntity> enrollments = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private List<CourseCategoryEntity> categories;
+    private Set<CategoryEntity> categories;
 }

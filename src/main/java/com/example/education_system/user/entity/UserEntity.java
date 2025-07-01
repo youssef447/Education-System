@@ -1,7 +1,7 @@
 package com.example.education_system.user.entity;
 
-
 import com.example.education_system.config.audit.AuditBaseEntity;
+import com.example.education_system.user.entity.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

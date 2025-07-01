@@ -9,6 +9,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +17,6 @@ import java.time.LocalDateTime;
 @Builder
 public class EnrollmentEntity extends AuditBaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(nullable = false)
     @NotNull(message = "user must be provided")
     private UserEntity user;
 

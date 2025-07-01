@@ -47,12 +47,12 @@ public class AuthenticationService {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
 
         UserEntity userEntity = userMapper.toEntity(request);
-
-        repository.save(userEntity);
         if (imageFile != null && !imageFile.isEmpty()) {
             String url = fileStorageService.store(imageFile);
             userEntity.setProfileUrl(url);
         }
+        repository.save(userEntity);
+
         return userMapper.toResponseDto(userEntity);
 
     }
