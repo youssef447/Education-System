@@ -18,21 +18,21 @@ public class CategoryController {
 
     @GetMapping("/getAll")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody getAllCourses() {
+    ApiResponseBody getAllCategories() {
         List<CategoryResponseDto> result = categoryService.getAllCategories();
         return new ApiResponseBody("categories fetched successfully", result, true);
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody addCourse(@Valid @RequestBody CategoryRequestDto request,@RequestParam(value = "image", required = false) MultipartFile file) {
+    ApiResponseBody addCategory(@Valid @RequestBody CategoryRequestDto request,@RequestParam(value = "image", required = false) MultipartFile file) {
         CategoryResponseDto result = categoryService.addCategory(request,file);
         return new ApiResponseBody("category added successfully", result, true);
     }
 
     @PostMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody deleteCourse(@RequestParam Long id) {
+    ApiResponseBody deleteCategory(@RequestParam Long id) {
         categoryService.deleteCategory(id);
         return new ApiResponseBody("category deleted successfully", true);
 
