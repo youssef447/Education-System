@@ -25,7 +25,7 @@ public class CategoryController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody addCategory(@Valid @ModelAttribute CategoryRequestDto request,@RequestParam(value = "image", required = false) MultipartFile file) {
+    ApiResponseBody addCategory(@Valid @RequestBody CategoryRequestDto request,@RequestParam(value = "image", required = false) MultipartFile file) {
         CategoryResponseDto result = categoryService.addCategory(request,file);
         return new ApiResponseBody("category added successfully", result, true);
     }
@@ -41,7 +41,7 @@ public class CategoryController {
     @PostMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody updateCategory(@RequestParam Long id,
-                                   @Valid @ModelAttribute CategoryRequestDto request,
+                                   @Valid @RequestBody CategoryRequestDto request,
                                    @RequestParam(value = "image", required = false) MultipartFile imageFile
     ) {
         categoryService.updateCategory(id, request, imageFile);
