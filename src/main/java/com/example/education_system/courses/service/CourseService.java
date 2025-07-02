@@ -2,6 +2,7 @@ package com.example.education_system.courses.service;
 
 import com.example.education_system.category.CategoryEntity;
 import com.example.education_system.category.CategoryRepository;
+import com.example.education_system.config.exceptions.classes.CourseCodeAlreadyExistsException;
 import com.example.education_system.config.exceptions.classes.CourseNotFoundException;
 import com.example.education_system.config.services.FileStorageService;
 import com.example.education_system.courses.dto.CourseRequestDto;
@@ -36,6 +37,8 @@ public class CourseService {
     }
 
     public CourseResponseDto addCourse(CourseRequestDto request, MultipartFile imageFile) {
+
+        validateCourseCode(request.getCourseCode());
         CourseEntity entity = courseMapper.toEntity(request);
 
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -56,6 +59,7 @@ public class CourseService {
         CourseEntity existing = courseRepository.findById(courseId)
                 .orElseThrow(CourseNotFoundException::new);
 
+        validateCourseCode(request.getCourseCode());
         // fields
         existing.setTitle(request.getTitle());
         existing.setCourseCode(request.getCourseCode());
@@ -76,5 +80,11 @@ public class CourseService {
         courseRepository.save(existing);
 
 
+    }
+
+   private void validateCourseCode(String courseCode) {
+        if (courseRepository.existsByCourseCode(courseCode)) {
+            throw new CourseCodeAlreadyExistsException();
+        }
     }
 }

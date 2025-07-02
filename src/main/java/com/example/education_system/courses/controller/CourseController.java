@@ -27,7 +27,7 @@ public class CourseController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody addCourse(@Valid @RequestBody CourseRequestDto request, @RequestParam(value = "image", required = false) MultipartFile file) {
+    ApiResponseBody addCourse(@Valid @ModelAttribute CourseRequestDto request, @RequestParam(value = "image", required = false) MultipartFile file) {
         CourseResponseDto result = courseService.addCourse(request, file);
         return new ApiResponseBody("course added successfully", result, true);
     }
@@ -42,7 +42,7 @@ public class CourseController {
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody updateCourse(@RequestParam Long id, @Valid @RequestBody CourseRequestDto request,
+    ApiResponseBody updateCourse(@RequestParam Long id, @Valid @ModelAttribute CourseRequestDto request,
                                  @RequestParam(value = "image", required = false) MultipartFile file) {
         courseService.updateCourse(id, request, file);
         return new ApiResponseBody("course updated successfully", true);

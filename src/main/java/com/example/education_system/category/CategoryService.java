@@ -1,5 +1,6 @@
 package com.example.education_system.category;
 
+import com.example.education_system.config.exceptions.classes.CategoryAlreadyExistsException;
 import com.example.education_system.config.exceptions.classes.CourseNotFoundException;
 
 import com.example.education_system.config.services.FileStorageService;
@@ -23,14 +24,14 @@ public class CategoryService {
     }
 
     public CategoryResponseDto addCategory(CategoryRequestDto request, MultipartFile imageFile) {
-
-        CategoryEntity entity=categoryMapper.toEntity(request);
+        validateCategoryName(request.getName());
+        CategoryEntity entity = categoryMapper.toEntity(request);
         if (imageFile != null && !imageFile.isEmpty()) {
             String url = fileStorageService.store(imageFile);
             entity.setIconUrl(url);
         }
-        CategoryEntity course = categoryRepository.save(entity);
-        return categoryMapper.toDTO(course);
+        CategoryEntity persisted = categoryRepository.save(entity);
+        return categoryMapper.toDTO(persisted);
     }
 
     public void deleteCategory(Long id) {
@@ -42,6 +43,7 @@ public class CategoryService {
         CategoryEntity existing = categoryRepository.findById(categoryId)
                 .orElseThrow(CourseNotFoundException::new);
 
+        validateCategoryName(request.getName());
         // fields
 
         existing.setDescription(request.getDescription());
@@ -54,5 +56,11 @@ public class CategoryService {
         categoryRepository.save(existing);
 
 
+    }
+
+    private void validateCategoryName(String categoryName) {
+        if (categoryRepository.existsByName(categoryName)) {
+            throw new CategoryAlreadyExistsException();
+        }
     }
 }

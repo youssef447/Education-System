@@ -1,9 +1,6 @@
 package com.example.education_system.config.exceptions.handler;
 
-import com.example.education_system.config.exceptions.classes.NoEventFoundException;
-import com.example.education_system.config.exceptions.classes.NoReminderFoundException;
-import com.example.education_system.config.exceptions.classes.RegisteredAlreadyException;
-import com.example.education_system.config.exceptions.classes.UsernameAlreadyExistsException;
+import com.example.education_system.config.exceptions.classes.*;
 import com.example.education_system.config.response.ApiResponseBody;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
@@ -60,7 +57,14 @@ public class GlobalExceptionHandler {
         int statusCode = HttpStatus.SC_CONFLICT;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
         return ResponseEntity.status(statusCode).body(response);
-    }@ExceptionHandler(RegisteredAlreadyException.class)
+    }@ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<?> handleCategoryAlreadyExistErrors(CategoryAlreadyExistsException ex) {
+        int statusCode = HttpStatus.SC_CONFLICT;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(RegisteredAlreadyException.class)
     public ResponseEntity<?> handleRegisteredAlreadyErrors(RegisteredAlreadyException ex) {
         int statusCode = HttpStatus.SC_CONFLICT;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
@@ -93,7 +97,9 @@ public class GlobalExceptionHandler {
         int statusCode = HttpStatus.SC_BAD_REQUEST;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
         return ResponseEntity.status(statusCode).body(response);
-    }@ExceptionHandler(SignatureVerificationException.class)
+    }
+
+    @ExceptionHandler(SignatureVerificationException.class)
     public ResponseEntity<?> handleSignatureVerificationErrors(SignatureVerificationException ex) {
         int statusCode = HttpStatus.SC_BAD_REQUEST;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
@@ -101,7 +107,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> handleAccessDenied(AccessDeniedException ex) {
+    public ResponseEntity<String> handleAccessDenied() {
         int statusCode = HttpStatus.SC_FORBIDDEN;
 
         return ResponseEntity.status(statusCode)

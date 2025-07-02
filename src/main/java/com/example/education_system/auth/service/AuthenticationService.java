@@ -26,10 +26,11 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository repository;
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
     private final FileStorageService fileStorageService;
     private final UserMapper userMapper;
+
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
 
