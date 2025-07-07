@@ -5,7 +5,7 @@ package com.example.education_system.auth.controller;
 import com.example.education_system.auth.service.AuthenticationService;
 import com.example.education_system.auth.dto.LoginResponseDto;
 import com.example.education_system.config.response.ApiResponseBody;
-import com.example.education_system.auth.dto.RegistrationDto;
+import com.example.education_system.auth.dto.UserRequestDTO;
 import com.example.education_system.auth.dto.LoginDto;
 import com.example.education_system.user.dto.UserResponseDto;
 import jakarta.validation.Valid;
@@ -23,7 +23,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ApiResponseBody register(
-            @Valid @ModelAttribute RegistrationDto request,
+            @Valid @ModelAttribute UserRequestDTO request,
             @RequestParam(value = "image", required = false) MultipartFile imageFile) {
 
         UserResponseDto result = authService.register(request, imageFile);

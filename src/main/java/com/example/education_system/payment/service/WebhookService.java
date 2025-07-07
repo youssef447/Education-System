@@ -5,7 +5,7 @@ import com.example.education_system.payment.entity.PaymentEntity;
 import com.example.education_system.payment.entity.PaymentStatus;
 import com.example.education_system.payment.repository.PaymentRepository;
 import com.example.education_system.user.entity.UserEntity;
-import com.example.education_system.user.service.CurrentUserService;
+import com.example.education_system.user.service.UserService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.EventDataObjectDeserializer;
@@ -26,7 +26,7 @@ import java.math.RoundingMode;
 @RequiredArgsConstructor
 public class WebhookService {
     private final PaymentRepository paymentRepository;
-    private final CurrentUserService currentUserService;
+    private final UserService UserService;
     @Value("${stripe.webhook.secret}")
     private String endpointSecret;
 
@@ -64,7 +64,7 @@ public class WebhookService {
         Long amountTotal = session.getAmountTotal(); // In cents
         String currency = session.getCurrency();
         //String customerEmail = session.getCustomerDetails().getEmail();
-        UserEntity user = currentUserService.getCurrentUser();
+        UserEntity user = UserService.getCurrentUser();
         BigDecimal dividedAmount = BigDecimal.valueOf(amountTotal)
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 

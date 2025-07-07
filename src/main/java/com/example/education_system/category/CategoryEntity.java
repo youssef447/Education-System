@@ -5,6 +5,7 @@ import com.example.education_system.config.audit.AuditBaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Table(name = "categories")
 public class CategoryEntity extends AuditBaseEntity<Long> {
     @NotNull(message = "category name is required")
     @Column(nullable = false, unique = true)

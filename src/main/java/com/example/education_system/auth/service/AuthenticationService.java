@@ -5,7 +5,7 @@ import com.example.education_system.auth.dto.LoginResponseDto;
 import com.example.education_system.config.exceptions.classes.RegisteredAlreadyException;
 import com.example.education_system.config.exceptions.classes.UsernameAlreadyExistsException;
 import com.example.education_system.config.services.FileStorageService;
-import com.example.education_system.auth.dto.RegistrationDto;
+import com.example.education_system.auth.dto.UserRequestDTO;
 import com.example.education_system.auth.dto.LoginDto;
 import com.example.education_system.user.dto.UserResponseDto;
 import com.example.education_system.user.entity.UserEntity;
@@ -35,7 +35,7 @@ public class AuthenticationService {
 
 
     @Transactional
-    public UserResponseDto register(RegistrationDto request, MultipartFile imageFile) {
+    public UserResponseDto register(UserRequestDTO request, MultipartFile imageFile) {
 // if email already exists
         if (repository.existsByEmail(request.getEmail())) {
             throw new RegisteredAlreadyException();

@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "payments")
 public class PaymentEntity extends AuditBaseEntity<Long> {
 
     @NotNull(message = "Amount is required")
@@ -32,11 +33,6 @@ public class PaymentEntity extends AuditBaseEntity<Long> {
 
     @ManyToOne
     private UserEntity user;
-
-
-
-
-
 
 }
 
