@@ -20,7 +20,7 @@ import com.stripe.model.LineItemCollection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/course")
 @RequiredArgsConstructor
 public class PaymentController {
     private final PaymentService paymentService;
@@ -51,7 +51,7 @@ public class PaymentController {
         String product = item.getPrice().getProductObject().getName();
         Long quantity = item.getQuantity();
         Long amount = session.getAmountTotal() / 100;
-        String currency =item.getCurrency().toUpperCase();
+        String currency = item.getCurrency().toUpperCase();
 
         model.addAttribute("productName", product);
         model.addAttribute("quantity", quantity);

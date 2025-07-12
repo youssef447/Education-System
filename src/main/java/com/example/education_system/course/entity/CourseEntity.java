@@ -2,11 +2,13 @@ package com.example.education_system.course.entity;
 
 import com.example.education_system.category.CategoryEntity;
 import com.example.education_system.config.audit.AuditBaseEntity;
+import com.example.education_system.course_coupon.entity.CouponEntity;
 import com.example.education_system.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -43,6 +45,10 @@ public class CourseEntity extends AuditBaseEntity<Long> {
 
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<CategoryEntity> categories;
+
+
+    @OneToMany(mappedBy = "course")
+    private Set<CouponEntity> coupons = new HashSet<>();
 
 
 }

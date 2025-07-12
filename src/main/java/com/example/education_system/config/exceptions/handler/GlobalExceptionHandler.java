@@ -57,7 +57,9 @@ public class GlobalExceptionHandler {
         int statusCode = HttpStatus.SC_CONFLICT;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
         return ResponseEntity.status(statusCode).body(response);
-    }@ExceptionHandler(CategoryAlreadyExistsException.class)
+    }
+
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
     public ResponseEntity<?> handleCategoryAlreadyExistErrors(CategoryAlreadyExistsException ex) {
         int statusCode = HttpStatus.SC_CONFLICT;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
@@ -78,6 +80,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(statusCode).body(response);
     }
 
+    @ExceptionHandler(CouponAlreadyExistsException.class)
+    public ResponseEntity<?> handleCouponAlreadyExistsErrors(CouponAlreadyExistsException ex) {
+        int statusCode = HttpStatus.SC_CONFLICT;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
     @ExceptionHandler(NoReminderFoundException.class)
     public ResponseEntity<?> handleNoReminderErrors(NoReminderFoundException ex) {
         int statusCode = HttpStatus.SC_NOT_FOUND;
@@ -85,7 +94,33 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(statusCode).body(response);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(CouponAlreadySentToMail.class)
+    public ResponseEntity<?> handleNoCouponAlreadySentToMailErrors(CouponAlreadySentToMail ex) {
+        int statusCode = HttpStatus.SC_BAD_REQUEST;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(CouponAlreadyRedeemed.class)
+    public ResponseEntity<?> handleNoCouponAlreadyRedeemedErrors(CouponAlreadyRedeemed ex) {
+        int statusCode = HttpStatus.SC_BAD_REQUEST;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(CouponNotFound.class)
+    public ResponseEntity<?> handleNoCouponNotFoundErrors(CouponNotFound ex) {
+        int statusCode = HttpStatus.SC_BAD_REQUEST;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(CouponWelcomeNotActive.class)
+    public ResponseEntity<?> handleCouponWelcomeNotActive(CouponWelcomeNotActive ex) {
+        int statusCode = HttpStatus.SC_BAD_REQUEST;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    } @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentErrors(IllegalArgumentException ex) {
         int statusCode = HttpStatus.SC_BAD_REQUEST;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);

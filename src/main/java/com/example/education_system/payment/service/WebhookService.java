@@ -12,6 +12,7 @@ import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.StripeObject;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,8 @@ public class WebhookService {
     @Value("${stripe.webhook.secret}")
     private String endpointSecret;
 
+
+    @Transactional
     public ResponseEntity<String> handleStripeEvent(
             @RequestBody String payload,
             @RequestHeader("Stripe-Signature") String sigHeader
@@ -51,8 +54,10 @@ public class WebhookService {
                 return ResponseEntity.badRequest().body("Unable to deserialize payment intent from event");
 
             }
-            if (stripeObject instanceof Session) {
-                savePayment((Session) stripeObject);
+            if (stripeObject instanceof Session && ((Session) stripeObject).getPaymentStatus().equals("paid")) {
+
+                savePayment((Session)stripeObject);
+                // TODO saveOrder and save coupon redemption if exists
             }
 
         }

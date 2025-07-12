@@ -25,5 +25,6 @@ public class ClassEntity extends AuditBaseEntity<Long> {
     private CourseEntity course;
 
     @OneToMany(mappedBy = "classEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+
     private Set<LessonEntity> lessons;
 }
