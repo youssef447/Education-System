@@ -2,6 +2,7 @@ package com.example.education_system.payment.entity;
 
 
 import com.example.education_system.config.audit.AuditBaseEntity;
+import com.example.education_system.order.OrderEntity;
 import com.example.education_system.user.entity.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -19,17 +20,21 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Table(name = "payments")
 public class PaymentEntity extends AuditBaseEntity<Long> {
-
+    @Column(nullable = false)
+    private String transactionId;
     @NotNull(message = "Amount is required")
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal amount;@NotNull(message = "Amount is required")
-    @Column(nullable = false)
-    @NotNull(message = "product name is required")
-    private String productName;
+    private BigDecimal amount;
+    @NotNull(message = "Amount is required")
+
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    private OrderEntity order;
 
     @NotNull(message = "currency required")
     private Currency currency;
-    private PaymentStatus status=PaymentStatus.PENDING;
+    private PaymentStatus status = PaymentStatus.PENDING;
 
     @ManyToOne
     private UserEntity user;

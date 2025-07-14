@@ -2,6 +2,7 @@ package com.example.education_system.course.entity;
 
 import com.example.education_system.category.CategoryEntity;
 import com.example.education_system.config.audit.AuditBaseEntity;
+import com.example.education_system.course_class.ClassEntity;
 import com.example.education_system.course_coupon.entity.CouponEntity;
 import com.example.education_system.user.entity.UserEntity;
 import jakarta.persistence.*;
@@ -12,12 +13,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "courses")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
-@Table(name = "courses")
 public class CourseEntity extends AuditBaseEntity<Long> {
     //Columns
     @Column(nullable = false)
@@ -31,13 +31,14 @@ public class CourseEntity extends AuditBaseEntity<Long> {
     @Column(nullable = false)
     private BigDecimal price;
     private String thumbnailUrl;
+    private String avgRating;
 
 
     //Relations
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "courses_instructors",
-            joinColumns = @JoinColumn(name = "courses_id"),
+            joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "instructor_id")
     )
     private Set<UserEntity> instructors;
@@ -47,6 +48,8 @@ public class CourseEntity extends AuditBaseEntity<Long> {
     private Set<CategoryEntity> categories;
 
 
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    private Set<ClassEntity> classes = new HashSet<>();
     @OneToMany(mappedBy = "course")
     private Set<CouponEntity> coupons = new HashSet<>();
 

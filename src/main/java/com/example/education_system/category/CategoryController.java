@@ -1,6 +1,7 @@
 package com.example.education_system.category;
 
 import com.example.education_system.config.response.ApiResponseBody;
+import com.example.education_system.course.dto.CourseResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,12 +26,12 @@ public class CategoryController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody addCategory(@Valid @ModelAttribute CategoryRequestDto request,@RequestParam(value = "image", required = false) MultipartFile file) {
-        CategoryResponseDto result = categoryService.addCategory(request,file);
+    ApiResponseBody addCategory(@Valid @ModelAttribute CategoryRequestDto request, @RequestParam(value = "image", required = false) MultipartFile file) {
+        CategoryResponseDto result = categoryService.addCategory(request, file);
         return new ApiResponseBody("category added successfully", result, true);
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody deleteCategory(@RequestParam Long id) {
         categoryService.deleteCategory(id);
@@ -46,5 +47,11 @@ public class CategoryController {
     ) {
         categoryService.updateCategory(id, request, imageFile);
         return new ApiResponseBody("category updated successfully", true);
+    }
+
+    @PostMapping("/courses/get")
+    ApiResponseBody getCategoryCourses(@RequestParam Long id) {
+        List<CourseResponseDto> courses = categoryService.getCategoryCourses(id);
+        return new ApiResponseBody("category courses fetched successfully", courses, true);
     }
 }

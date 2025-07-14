@@ -2,13 +2,15 @@ package com.example.education_system.category;
 
 
 import com.example.education_system.config.audit.AuditBaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import com.example.education_system.course.entity.CourseEntity;
+import jakarta.persistence.*;
 
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,5 +23,8 @@ public class CategoryEntity extends AuditBaseEntity<Long> {
     private String name;
     private String description;
     private String iconUrl;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<CourseEntity> courses;
 
 }

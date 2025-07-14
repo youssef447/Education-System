@@ -12,6 +12,8 @@ public interface CouponMapper {
     CouponResponseDTO toResponseDto(CouponEntity entity);
 
 
+
     List<CouponResponseDTO> toResponseListDto(List<CouponEntity> entity);
+
 
 }

@@ -1,31 +1,42 @@
 package com.example.education_system.course_lesson;
-import com.example.education_system.config.response.ApiResponseBody;
+
+import com.example.education_system.config.services.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
 @RequiredArgsConstructor
 public class LessonService {
     private final LessonRepository lessonRepository;
+    private final FileStorageService fileStorageService;
 
 
+    LessonResponseDTO add(LessonRequestDTO request) {
 
+        LessonEntity entity = new LessonEntity();
+        entity.setTitle(request.getTitle());
+        entity.setDescription(request.getDescription());
+        entity.setOrderNumber(request.getOrderNumber());
+        entity.setTitle(request.getTitle());
+        MultipartFile file = request.getContentFile();
+        if (file != null && !file.isEmpty()) {
+            String url = fileStorageService.store(file);
+            LessonContentEntity contentEntity = new LessonContentEntity();
+            contentEntity.setUrl(url);
+            contentEntity.setCloudinaryPublicId(publicId);
+            entity.setContent(contentEntity);
 
-
-
-    ApiResponseBody add() {
-        return new ApiResponseBody("lesson added successfully", true);
+        }
     }
 
 
-    ApiResponseBody update() {
-        return new ApiResponseBody("lesson updated successfully", true);
+    LessonResponseDTO update(LessonRequestDTO request) {
     }
 
 
-    ApiResponseBody delete(Long id) {
-        return new ApiResponseBody("lesson deleted successfully", true);
+    void delete(Long id) {
+        lessonRepository.deleteById(id);
     }
 }

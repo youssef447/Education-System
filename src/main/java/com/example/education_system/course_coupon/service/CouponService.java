@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -72,7 +73,8 @@ public class CouponService {
         String message = "Congratulations! 🎉\n\n" +
                 "You have received a discount coupon.\n\n" +
                 "Use this code at checkout: " + "WELCOME0000" + "\n" +
-                "Hurry! The coupon is valid until: " + "\n" + LocalDateTime.now().plusDays(7).format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")) + "\n\n" +
+                "Hurry! The coupon is valid until: " + "\n" + LocalDateTime.now().plusDays(7)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")) + "\n\n" +
                 "Enjoy your shopping!";
 
         emailService.sendEmail(request.getEmail(), "Coupon Discount", message);
@@ -117,6 +119,7 @@ public class CouponService {
     private CouponValidateResponseDTO validateWelcomeCoupon(CouponRedeemRequestDTO request) {
         UserEntity user = userRepository.findByEmail(userService.getCurrentUser().getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+
         if (user.getCreatedDate().isBefore(LocalDateTime.now().minusDays(7))) {
             throw new CouponExpiredException();
         }
@@ -126,15 +129,15 @@ public class CouponService {
         if (!entity.isActive()) {
             throw new CouponWelcomeNotActive();
         }
+
         BigDecimal total = courseRepository.findPriceById(request.getCourseId())
                 .orElseThrow(CourseNotFoundException::new);
 
-        BigDecimal discountedPrice = total.multiply(BigDecimal.valueOf(entity.getDiscountPercentage()));
+        BigDecimal discountedPrice = calculateDiscount(total, entity.getDiscountPercentage());
+
         return CouponValidateResponseDTO.builder().valid(true)
                 .discountPercentage(entity.getDiscountPercentage()).originalPrice(total)
                 .discountedPrice(discountedPrice).build();
-
-
     }
 
     private CouponValidateResponseDTO validateCourseCoupon(CouponRedeemRequestDTO request) {
@@ -169,7 +172,7 @@ public class CouponService {
         if (!entity.isActive()) {
             throw new CouponWelcomeNotActive();
         }
-        BigDecimal discountedPrice = total.multiply(BigDecimal.valueOf(entity.getDiscountPercentage()));
+        BigDecimal discountedPrice = calculateDiscount(total, entity.getDiscountPercentage());
 
 
         return CouponValidateResponseDTO.builder().valid(true)
@@ -177,8 +180,16 @@ public class CouponService {
                 .discountedPrice(discountedPrice).build();
     }
 
+
+    /// HELPERS
     private String generateCode() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase();
+    }
+
+    private BigDecimal calculateDiscount(BigDecimal total, double discountPercentage) {
+        BigDecimal discount = BigDecimal.valueOf(discountPercentage)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        return total.multiply(BigDecimal.ONE.subtract(discount));
     }
 
 

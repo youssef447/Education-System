@@ -15,5 +15,5 @@ public class CouponValidateResponseDTO {
     private BigDecimal discountedPrice;
     private BigDecimal originalPrice;
     private Double discountPercentage;
-    private boolean valid;
+    private boolean valid = true;
 }
