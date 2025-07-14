@@ -8,8 +8,10 @@ import com.example.education_system.config.services.FileStorageService;
 import com.example.education_system.course.dto.CourseResponseDto;
 import com.example.education_system.course.entity.CourseEntity;
 import com.example.education_system.course.mapper.CourseMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
@@ -29,9 +32,10 @@ public class CategoryService {
         return categoryMapper.toListDto(categories);
     }
 
-    public CategoryResponseDto addCategory(CategoryRequestDto request, MultipartFile imageFile) {
+    public CategoryResponseDto addCategory(@Valid CategoryRequestDto request) {
         isCategoryUnique(request.getName());
         CategoryEntity entity = categoryMapper.toEntity(request);
+        MultipartFile imageFile = request.getImageFile();
         if (imageFile != null && !imageFile.isEmpty()) {
             String url = fileStorageService.store(imageFile);
             entity.setIconUrl(url);
@@ -45,7 +49,7 @@ public class CategoryService {
 
     }
 
-    public void updateCategory(Long categoryId, CategoryRequestDto request, MultipartFile imageFile) {
+    public void updateCategory(Long categoryId, @Valid CategoryRequestDto request) {
         CategoryEntity existing = categoryRepository.findById(categoryId)
                 .orElseThrow(CategoryNotFound::new);
 
@@ -54,6 +58,7 @@ public class CategoryService {
 
         existing.setDescription(request.getDescription());
         existing.setName(request.getName());
+        MultipartFile imageFile = request.getImageFile();
         if (imageFile != null && !imageFile.isEmpty()) {
             String url = fileStorageService.store(imageFile);
             existing.setIconUrl(url);

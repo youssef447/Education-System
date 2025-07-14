@@ -2,11 +2,9 @@ package com.example.education_system.category;
 
 import com.example.education_system.config.response.ApiResponseBody;
 import com.example.education_system.course.dto.CourseResponseDto;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,8 +24,8 @@ public class CategoryController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody addCategory(@Valid @ModelAttribute CategoryRequestDto request, @RequestParam(value = "image", required = false) MultipartFile file) {
-        CategoryResponseDto result = categoryService.addCategory(request, file);
+    ApiResponseBody addCategory(@ModelAttribute CategoryRequestDto request) {
+        CategoryResponseDto result = categoryService.addCategory(request);
         return new ApiResponseBody("category added successfully", result, true);
     }
 
@@ -39,13 +37,13 @@ public class CategoryController {
 
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody updateCategory(@RequestParam Long id,
-                                   @Valid @ModelAttribute CategoryRequestDto request,
-                                   @RequestParam(value = "image", required = false) MultipartFile imageFile
+    ApiResponseBody updateCategory(@PathVariable Long id,
+                                   @ModelAttribute CategoryRequestDto request
+
     ) {
-        categoryService.updateCategory(id, request, imageFile);
+        categoryService.updateCategory(id, request);
         return new ApiResponseBody("category updated successfully", true);
     }
 

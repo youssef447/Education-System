@@ -4,6 +4,8 @@ import com.example.education_system.config.exceptions.classes.*;
 import com.example.education_system.config.response.ApiResponseBody;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.apache.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,16 @@ public class GlobalExceptionHandler {
 
         String errorMessages = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+        ApiResponseBody response = new ApiResponseBody(errorMessages, false);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handleConstraintViolationErrors(ConstraintViolationException ex) {
+        int statusCode = HttpStatus.SC_BAD_REQUEST;
+        String errorMessages = ex.getConstraintViolations().stream()
+                .map(ConstraintViolation::getMessage)
                 .collect(Collectors.joining(", "));
         ApiResponseBody response = new ApiResponseBody(errorMessages, false);
         return ResponseEntity.status(statusCode).body(response);
@@ -120,7 +132,9 @@ public class GlobalExceptionHandler {
         int statusCode = HttpStatus.SC_BAD_REQUEST;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
         return ResponseEntity.status(statusCode).body(response);
-    } @ExceptionHandler(IllegalArgumentException.class)
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentErrors(IllegalArgumentException ex) {
         int statusCode = HttpStatus.SC_BAD_REQUEST;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);

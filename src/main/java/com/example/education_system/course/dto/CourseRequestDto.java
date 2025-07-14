@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,10 +23,10 @@ public class CourseRequestDto {
 
     @NotBlank(message = "Description is required")
     private String description;
+    private MultipartFile thumbnailFile;
 
-    private String thumbnailUrl;
     @NotNull(message = "price is required")
-    @DecimalMin(value = "0", inclusive = true,message = "price cannot be less that zero")
+    @DecimalMin(value = "0", inclusive = true, message = "price cannot be less that zero")
     private BigDecimal price;
 
     @NotEmpty(message = "At least one instructor is required")
@@ -33,8 +34,6 @@ public class CourseRequestDto {
 
     @NotEmpty(message = "At least one category is required")
     private List<Long> categoryIds;
-
-
 
 
 }

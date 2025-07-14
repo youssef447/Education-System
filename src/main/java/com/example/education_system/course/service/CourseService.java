@@ -36,11 +36,11 @@ public class CourseService {
         return courseMapper.toListDto(courses);
     }
 
-    public CourseResponseDto addCourse(CourseRequestDto request, MultipartFile imageFile) {
+    public CourseResponseDto addCourse(CourseRequestDto request) {
 
         validateCourseCode(request.getCourseCode());
         CourseEntity entity = courseMapper.toEntity(request);
-
+        MultipartFile imageFile = request.getThumbnailFile();
         if (imageFile != null && !imageFile.isEmpty()) {
             String url = fileStorageService.store(imageFile);
             entity.setThumbnailUrl(url);
@@ -55,7 +55,7 @@ public class CourseService {
     }
 
     @Transactional
-    public void updateCourse(Long courseId, CourseRequestDto request, MultipartFile imageFile) {
+    public void updateCourse(Long courseId, CourseRequestDto request) {
         CourseEntity existing = courseRepository.findById(courseId)
                 .orElseThrow(CourseNotFoundException::new);
 
@@ -64,6 +64,8 @@ public class CourseService {
         existing.setTitle(request.getTitle());
         existing.setCourseCode(request.getCourseCode());
         existing.setDescription(request.getDescription());
+
+        MultipartFile imageFile = request.getThumbnailFile();
         if (imageFile != null && !imageFile.isEmpty()) {
             String url = fileStorageService.store(imageFile);
             existing.setThumbnailUrl(url);
@@ -82,7 +84,7 @@ public class CourseService {
 
     }
 
-   private void validateCourseCode(String courseCode) {
+    private void validateCourseCode(String courseCode) {
         if (courseRepository.existsByCourseCode(courseCode)) {
             throw new CourseCodeAlreadyExistsException();
         }

@@ -25,10 +25,12 @@ public class CourseController {
         return new ApiResponseBody("courses fetched successfully", result, true);
     }
 
+    //, consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody addCourse(@Valid @ModelAttribute CourseRequestDto request, @RequestParam(value = "image", required = false) MultipartFile file) {
-        CourseResponseDto result = courseService.addCourse(request, file);
+    ApiResponseBody addCourse(@Valid @ModelAttribute CourseRequestDto request
+    ) {
+        CourseResponseDto result = courseService.addCourse(request);
         return new ApiResponseBody("course added successfully", result, true);
     }
 
@@ -37,14 +39,13 @@ public class CourseController {
     ApiResponseBody deleteCourse(@PathVariable Long id) {
         courseService.deleteCourse(id);
         return new ApiResponseBody("course deleted successfully", true);
-
     }
 
-    @PostMapping("/update")
+    @PostMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody updateCourse(@RequestParam Long id, @Valid @ModelAttribute CourseRequestDto request,
-                                 @RequestParam(value = "image", required = false) MultipartFile file) {
-        courseService.updateCourse(id, request, file);
+    ApiResponseBody updateCourse(@PathVariable Long id, @Valid @ModelAttribute CourseRequestDto request
+    ) {
+        courseService.updateCourse(id, request);
         return new ApiResponseBody("course updated successfully", true);
     }
 }
