@@ -18,7 +18,7 @@ public class CouponSeeder implements CommandLineRunner {
     public void run(String... args) {
         if (!couponRepository.existsByCode("WELCOME0000")) {
             CouponEntity welcomeCoupon = CouponEntity.builder()
-                    .code("WELCOME0000")
+                    .code("WELCOME0000").type(CouponEntity.CouponType.GLOBAL)
                     .discountPercentage(5.0)
                     .active(true)
                     .build();

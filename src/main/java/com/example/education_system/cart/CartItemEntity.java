@@ -3,10 +3,7 @@ package com.example.education_system.cart;
 import com.example.education_system.config.audit.AuditBaseEntity;
 import com.example.education_system.course.entity.CourseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -15,6 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class CartItemEntity extends AuditBaseEntity<Long> {
     @JoinColumn(nullable = false)

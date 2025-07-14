@@ -9,6 +9,6 @@ public interface LessonMapper {
 
     LessonEntity toEntity(LessonRequestDTO request);
 
-    @Mapping(target = "createdBy", expression = "java(source.getCreatedBy().getUsername())")
+    @Mapping(target = "createdBy", expression = "java(entity.getCreatedBy().getUsername())")
     LessonResponseDTO toResponseDto(LessonEntity entity);
 }

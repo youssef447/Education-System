@@ -1,6 +1,8 @@
 package com.example.education_system.reports;
 
+import com.example.education_system.order.OrderRepository;
 import com.lowagie.text.*;
+import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ public class ReportPdfGeneratorService {
         String[] headers = {"Course Name", "Quantity", "Total Revenue"};
         List<String[]> rows = data.stream().map(item ->
                 new String[]{
-                        item.product().getName(),
+                        item.course().courseCode(),
                         String.valueOf(item.totalQuantity()),
                         String.format("%.2f", item.totalRevenue())
                 }).toList();
@@ -39,7 +41,7 @@ public class ReportPdfGeneratorService {
         String[] headers = {"Category Name", "Quantity", "Total Revenue"};
         List<String[]> rows = data.stream().map(item ->
                 new String[]{
-                        item.category(),
+                        item.category().getName(),
                         String.valueOf(item.totalQuantity()),
                         String.format("%.2f", item.totalRevenue())
                 }).toList();

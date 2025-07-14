@@ -12,7 +12,7 @@ public class ReviewNewRequestDTO {
     @NotNull(message = "user id is required")
     private Long userId;
     @NotNull(message = "product id is required")
-    private Long productId;
+    private Long courseId;
 
     private String comment;
 }

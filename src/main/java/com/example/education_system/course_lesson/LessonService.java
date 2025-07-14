@@ -25,14 +25,18 @@ public class LessonService {
             String url = fileStorageService.store(file);
             LessonContentEntity contentEntity = new LessonContentEntity();
             contentEntity.setUrl(url);
-            contentEntity.setCloudinaryPublicId(publicId);
+            //TODO
+           // contentEntity.setCloudinaryPublicId(publicId);
             entity.setContent(contentEntity);
 
         }
+        return LessonResponseDTO.builder().build();
     }
 
 
     LessonResponseDTO update(LessonRequestDTO request) {
+        return LessonResponseDTO.builder().build();
+
     }
 
 

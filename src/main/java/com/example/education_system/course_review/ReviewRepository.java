@@ -11,14 +11,13 @@ import java.util.Optional;
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
-    @Query("SELECT AVG(r.rate) FROM ReviewEntity r WHERE r.product.id = :productId")
-    Optional<Double> findAverageRatingByProductId(@Param("productId") Long productId);
+    @Query("SELECT AVG(r.rate) FROM ReviewEntity r WHERE r.course.id = :courseId")
+    Optional<Double> findAverageRatingByCourseId(@Param("courseId") Long courseId);
 
-    List<ReviewEntity> findByProductId(Long productId);
+    boolean existsByUserId(Long userId);
 
-    boolean existsByUserId(long userId);
+    List<ReviewEntity> findAllByCourseId(Long courseId);
 
-    List<ReviewEntity> findAllByProductId(long productId);
+    List<ReviewEntity> findByCourseIdAndApproved(Long id, boolean approved);
 
-    List<ReviewEntity> findByProductIdAndApproved(Long id, boolean approved);
 }

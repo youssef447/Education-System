@@ -17,8 +17,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class OrderItemEntity extends AuditBaseEntity<Long> {
 
+
     @Column(nullable = false)
-    private BigDecimal priceAtPurchase;
+    private int quantity;
+
+    @Column(nullable = false)
+    private BigDecimal unitPrice;
 
     @OneToOne
     @JoinColumn(nullable=false)

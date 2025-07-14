@@ -1,9 +1,9 @@
 package com.example.education_system.course_review;
 
-import com.example.ericka_j_products.Entity.Product;
-import com.example.ericka_j_products.Entity.User;
-import com.example.ericka_j_products.Repositories.ProductRepository;
-import com.example.ericka_j_products.Repositories.UserRepository;
+import com.example.education_system.course.entity.CourseEntity;
+import com.example.education_system.course.repository.CourseRepository;
+import com.example.education_system.user.entity.UserEntity;
+import com.example.education_system.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,27 +17,32 @@ import java.util.List;
 @Validated
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    private final ProductRepository productRepository;
+    private final CourseRepository courseRepository;
     private final UserRepository userRepository;
 
 
     void add(@Valid ReviewNewRequestDTO request) {
-        Product product = productRepository.findById(request.getProductId()).orElseThrow(() -> new IllegalArgumentException("product not found"));
+        CourseEntity course = courseRepository.findById(request.getCourseId())
+                .orElseThrow(() -> new IllegalArgumentException("course not found"));
 
         if (reviewRepository.existsByUserId(request.getUserId())) {
             throw new IllegalArgumentException("user already added review ");
         }
 
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new IllegalArgumentException("user not found"));
+        UserEntity user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("user not found"));
 
-        ReviewEntity entity = ReviewEntity.builder().rate(request.getRate()).comment(request.getComment()).user(user).product(product).build();
+        ReviewEntity entity = ReviewEntity.builder()
+                .rate(request.getRate())
+                .comment(request.getComment()).user(user).course(course).build();
         reviewRepository.save(entity);
 
     }
 
     void update(ReviewUpdateRequestDTO request, Long id) {
 
-        ReviewEntity entity = reviewRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("review not found"));
+        ReviewEntity entity = reviewRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("review not found"));
         entity.setRate(request.getRate());
         entity.setComment(request.getComment());
         reviewRepository.save(entity);
@@ -53,16 +58,15 @@ public class ReviewService {
 
         return result.stream().map(reviewEntity ->
                 ReviewResponseDTO.builder().username(reviewEntity.getUser()
-                                .getName()).comment(reviewEntity.getComment()
+                                .getUsername()).comment(reviewEntity.getComment()
                         ).rate(reviewEntity.getRate())
                         .approved(reviewEntity.isApproved()).build()).toList();
     }
 
-    List<ReviewResponseDTO> getByProduct(Long id) {
-        List<ReviewEntity> result = reviewRepository.findAllByProductId(id);
-
+    List<ReviewResponseDTO> getByCourse(Long id) {
+        List<ReviewEntity> result = reviewRepository.findAllByCourseId(id);
         return result.stream().map(reviewEntity -> ReviewResponseDTO.builder().
-                username(reviewEntity.getUser().getName()).
+                username(reviewEntity.getUser().getUsername()).
                 comment(reviewEntity.getComment()).
                 rate(reviewEntity.getRate()).approved
                         (reviewEntity.isApproved())
@@ -71,7 +75,8 @@ public class ReviewService {
     }
 
     void approveReview(Long id, boolean approve) {
-        ReviewEntity entity = reviewRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("review not found"));
+        ReviewEntity entity = reviewRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("review not found"));
         entity.setApproved(approve);
         reviewRepository.save(entity);
 

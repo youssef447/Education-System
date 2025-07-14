@@ -44,8 +44,8 @@ public class ReviewController {
 
     @PostMapping("/get")
     @PreAuthorize("hasAuthority('ADMIN')")
-    ResponseEntity<Map<String, List<ReviewResponseDTO>>> getByProduct(@RequestParam Long id) {
-        List<ReviewResponseDTO> reviews = reviewService.getByProduct(id);
+    ResponseEntity<Map<String, List<ReviewResponseDTO>>> getByCourse(@RequestParam Long id) {
+        List<ReviewResponseDTO> reviews = reviewService.getByCourse(id);
         return ResponseEntity.ok().body(Map.of("data", reviews));
     }
 

@@ -1,7 +1,10 @@
 package com.example.education_system.reports;
 
-import com.example.ericka_j_products.Entity.Product;
-import com.example.ericka_j_products.Repositories.OrderRepository;
+import com.example.education_system.category.CategoryResponseDto;
+import com.example.education_system.course.dto.CourseResponseDto;
+import com.example.education_system.order.OrderEntity;
+import com.example.education_system.order.OrderRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +19,16 @@ public class ReportService {
     private final ReportPdfGeneratorService reportPdfGeneratorService;
 
     Long getTotalOrders(String status) {
-        return orderRepository.countByStatus(status);
+        return orderRepository.countByStatus(OrderEntity.OrderStatus.valueOf(status));
     }
 
 
-    public List<CourseStatsDTO> getTopSalesByProduct() {
-        List<Object[]> raw = orderRepository.findTopSellingProductsWithStats();
+    public List<CourseStatsDTO> getTopSalesByCourse() {
+        List<Object[]> raw = orderRepository.findTopSellingCoursesWithStats();
 
         return raw.stream()
                 .map(row -> new CourseStatsDTO(
-                        (Product) row[0],
+                        (CourseResponseDto) row[0],
                         (Long) row[1],
                         (Double) row[2]
                 ))
@@ -37,7 +40,7 @@ public class ReportService {
 
         return raw.stream()
                 .map(row -> new CategoryStatsDTO(
-                        (String) row[0],
+                        (CategoryResponseDto) row[0],
                         (Long) row[1],
                         (Double) row[2]
                 ))
@@ -87,9 +90,9 @@ public class ReportService {
     }
 
     //PDF
-    public byte[] topSalesByProductPdf() {
-        List<CourseStatsDTO> result = getTopSalesByProduct();
-        return reportPdfGeneratorService.generateTopSalesByProductPdf(result);
+    public byte[] topSalesByCoursePdf() {
+        List<CourseStatsDTO> result = getTopSalesByCourse();
+        return reportPdfGeneratorService.generateTopSalesByCoursePdf(result);
     }
 
     public byte[] topSalesByCategoryPdf() {

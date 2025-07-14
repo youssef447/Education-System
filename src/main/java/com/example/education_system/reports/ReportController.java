@@ -30,9 +30,9 @@ public class ReportController {
 
     }
 
-    @GetMapping("/getTopSalesByProduct")
-    public Map<String, List<CourseStatsDTO>> getTopSalesByProduct() {
-        List<CourseStatsDTO> result = reportService.getTopSalesByProduct();
+    @GetMapping("/getTopSalesByCourse")
+    public Map<String, List<CourseStatsDTO>> getTopSalesByCourse() {
+        List<CourseStatsDTO> result = reportService.getTopSalesByCourse();
         return Map.of("data", result);
 
     }
@@ -84,12 +84,12 @@ public class ReportController {
 
     //pdf
 
-    @GetMapping("/pdf/topSalesByProduct")
-    public ResponseEntity<byte[]> topSalesByProductPdf() throws DocumentException {
-        byte[] pdfBytes = reportService.topSalesByProductPdf();
+    @GetMapping("/pdf/topSalesByCourse")
+    public ResponseEntity<byte[]> topSalesByCoursePdf() throws DocumentException {
+        byte[] pdfBytes = reportService.topSalesByCoursePdf();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", "top-sales-by-product.pdf");
+        headers.setContentDispositionFormData("attachment", "top-sales-by-course.pdf");
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 

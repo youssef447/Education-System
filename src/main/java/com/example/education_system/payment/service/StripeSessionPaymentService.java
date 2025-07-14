@@ -24,14 +24,14 @@ public class StripeSessionPaymentService implements PaymentService {
         // Create a PaymentIntent with the order amount and currency
         SessionCreateParams.LineItem.PriceData.ProductData productData =
                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                        .setName(paymentRequest.productName())
+                        .setName(paymentRequest.courseCode())
                         .build();
 
         // Create new line item with the above product data and associated price
         SessionCreateParams.LineItem.PriceData priceData =
                 SessionCreateParams.LineItem.PriceData.builder()
                         .setCurrency(paymentRequest.currency().name())
-                        .setUnitAmount(paymentRequest.amount().multiply(BigDecimal.valueOf(100)))
+                        .setUnitAmount(paymentRequest.amount()*100)
                         .setProductData(productData)
                         .build();
 
