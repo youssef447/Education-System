@@ -1,5 +1,5 @@
 
-package com.example.education_system.config.security;
+package com.example.education_system.config.security.access;
 
 import com.example.education_system.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

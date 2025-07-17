@@ -1,5 +1,5 @@
 
-package com.example.education_system.config.security;
+package com.example.education_system.config.security.annotation;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 

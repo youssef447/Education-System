@@ -2,8 +2,9 @@
 package com.example.education_system.auth.service;
 
 import com.example.education_system.auth.dto.LoginResponseDto;
-import com.example.education_system.config.exceptions.classes.RegisteredAlreadyException;
+import com.example.education_system.config.exceptions.classes.EmailAlreadyException;
 import com.example.education_system.config.exceptions.classes.UsernameAlreadyExistsException;
+import com.example.education_system.config.security.utils.JwtUtil;
 import com.example.education_system.config.services.FileStorageService;
 import com.example.education_system.auth.dto.UserRequestDTO;
 import com.example.education_system.auth.dto.LoginDto;
@@ -29,7 +30,6 @@ public class AuthenticationService {
     private final FileStorageService fileStorageService;
     private final UserMapper userMapper;
 
-    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
@@ -38,7 +38,7 @@ public class AuthenticationService {
     public UserResponseDto register(UserRequestDTO request, MultipartFile imageFile) {
 // if email already exists
         if (repository.existsByEmail(request.getEmail())) {
-            throw new RegisteredAlreadyException();
+            throw new EmailAlreadyException();
         }
         // if username already exists
         if (repository.existsByUsername(request.getUsername())) {
@@ -62,7 +62,7 @@ public class AuthenticationService {
     public LoginResponseDto login(LoginDto loginDto) {
         Authentication auth = new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword());
         authenticationManager.authenticate(auth);
-        String token = jwtService.generateToken(loginDto.getUsernameOrEmail());
+        String token = JwtUtil.generateToken(loginDto.getUsernameOrEmail());
         return new LoginResponseDto(token, new Date());
     }
 

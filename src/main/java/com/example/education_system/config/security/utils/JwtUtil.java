@@ -1,21 +1,19 @@
-package com.example.education_system.auth.service;
+package com.example.education_system.config.security.utils;
 
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
-@Component
-public class JwtService {
-    private final String SECRET = "my-super-secret-key-that-is-long-enough-1234567890!@#";
-    private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes());
+public abstract class JwtUtil {
+    private static final String SECRET = "my-super-secret-key-that-is-long-enough-1234567890!@#";
+    private static final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     //Generate Token with a subject: username
-    public String generateToken(String username) {
+    public static String generateToken(String username) {
         //1hour
         long EXPIRATION_TIME = 1000 * 60 * 60;
         return Jwts.builder()
@@ -26,11 +24,15 @@ public class JwtService {
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    public static String extractUsername(String token) {
         return extractClaims(token).getSubject();
     }
 
-    private Claims extractClaims(String token) {
+    public static boolean isTokenExpired(String token) {
+        return extractClaims(token).getExpiration().before(new Date());
+    }
+
+    private static Claims extractClaims(String token) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
@@ -39,7 +41,4 @@ public class JwtService {
     }
 
 
-    public boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
-    }
 }

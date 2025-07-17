@@ -3,7 +3,7 @@ package com.example.education_system.user.controller;
 
 import com.example.education_system.auth.dto.UserRequestDTO;
 import com.example.education_system.config.response.ApiResponseBody;
-import com.example.education_system.config.security.IsUserOwner;
+import com.example.education_system.config.security.annotation.IsUserOwner;
 import com.example.education_system.user.dto.UserResponseDto;
 import com.example.education_system.user.entity.UserRole;
 import com.example.education_system.user.service.UserService;

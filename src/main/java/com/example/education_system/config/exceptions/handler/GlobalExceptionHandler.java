@@ -78,8 +78,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(statusCode).body(response);
     }
 
-    @ExceptionHandler(RegisteredAlreadyException.class)
-    public ResponseEntity<?> handleRegisteredAlreadyErrors(RegisteredAlreadyException ex) {
+    @ExceptionHandler(EmailAlreadyException.class)
+    public ResponseEntity<?> handleEmailAlreadyErrors(EmailAlreadyException ex) {
         int statusCode = HttpStatus.SC_CONFLICT;
         ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
         return ResponseEntity.status(statusCode).body(response);

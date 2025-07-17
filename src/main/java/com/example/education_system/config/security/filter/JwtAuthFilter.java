@@ -1,6 +1,6 @@
-package com.example.education_system.config.security;
+package com.example.education_system.config.security.filter;
 
-import com.example.education_system.auth.service.JwtService;
+import com.example.education_system.config.security.utils.JwtUtil;
 import com.example.education_system.user.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,7 +20,6 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-    final JwtService jwtService;
     final CustomUserDetailsService customUserDetailsService;
 
     @Override
@@ -31,14 +30,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             //throws exception if it couldn't decrypt token with secret
-            username = jwtService.extractUsername(token);
+            username = JwtUtil.extractUsername(token);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             //throws user not found
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
             //it checks expiration
-            if (!jwtService.isTokenExpired(token)) {
+            if (!JwtUtil.isTokenExpired(token)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
