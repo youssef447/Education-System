@@ -36,6 +36,19 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
 
         return http
+                .headers(httpSecurityHeadersConfigurer ->
+                        httpSecurityHeadersConfigurer
+                                .contentSecurityPolicy(csp ->
+                                        csp.policyDirectives(
+                                                "default-src 'self'; " +
+                                                        "script-src 'self'; " +
+                                                        "object-src 'none'; " +
+                                                        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/; " +
+                                                        "font-src https://fonts.gstatic.com;"
+                                        )
+                                )
+                                .xssProtection(HeadersConfigurer.XXssConfig::disable)
+                )
 
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.
