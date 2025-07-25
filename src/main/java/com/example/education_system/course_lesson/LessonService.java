@@ -1,5 +1,6 @@
 package com.example.education_system.course_lesson;
 
+import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.config.services.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,9 @@ public class LessonService {
         entity.setTitle(request.getTitle());
         MultipartFile file = request.getContentFile();
         if (file != null && !file.isEmpty()) {
-            String url = fileStorageService.store(file);
+            FileInfo fileInfo = fileStorageService.store(file);
             LessonContentEntity contentEntity = new LessonContentEntity();
-            contentEntity.setUrl(url);
+            contentEntity.setFileInfo(fileInfo);
             //TODO
            // contentEntity.setCloudinaryPublicId(publicId);
             entity.setContent(contentEntity);

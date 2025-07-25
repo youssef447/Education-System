@@ -9,8 +9,10 @@ import org.mapstruct.Mapping;
 //The @Mapper annotation tells MapStruct to generate the implementation of this interface.
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-   @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "roles", ignore = true)
     UserEntity toEntity(UserRequestDTO userUserRequestDTO);
+
+    @Mapping(source = "imageFile.url", target = "profileUrl")
     UserResponseDto toResponseDto(UserEntity entity);
 }
 

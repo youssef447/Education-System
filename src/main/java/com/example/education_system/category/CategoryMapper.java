@@ -10,7 +10,7 @@ import java.util.List;
 public interface CategoryMapper {
     CategoryResponseDto toDTO(CategoryEntity entity);
 
-    @Mapping(target="iconUrl",ignore = true)
+    @Mapping(target="iconFile",ignore = true)
     CategoryEntity toEntity(CategoryRequestDto request);
 
     List<CategoryResponseDto> toListDto(List<CategoryEntity> entity);

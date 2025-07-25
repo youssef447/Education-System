@@ -1,6 +1,7 @@
 package com.example.education_system.course_lesson;
 
 import com.example.education_system.config.audit.AuditBaseEntity;
+import com.example.education_system.config.services.FileInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,8 @@ import lombok.Setter;
 /*@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "content_type", discriminatorType = DiscriminatorType.STRING)*/
 public  class LessonContentEntity extends AuditBaseEntity<Long> {
-    private String cloudinaryPublicId;
-    private String url;
-    @Enumerated(EnumType.STRING)
-    private LessonContentType contentType;
+    private FileInfo fileInfo;
+
 
     /// Relationships
     @OneToOne(fetch = FetchType.LAZY)
@@ -25,7 +24,5 @@ public  class LessonContentEntity extends AuditBaseEntity<Long> {
     private LessonEntity lesson;
 
 
-    public enum LessonContentType {
-        FILE, VIDEO, IMAGE, RECORD
-    }
+
 }

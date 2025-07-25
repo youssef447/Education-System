@@ -2,6 +2,7 @@ package com.example.education_system.auth.service.OAuth;
 
 import com.example.education_system.auth.service.OAuth.info.OAuth2UserInfo;
 import com.example.education_system.auth.service.OAuth.info.OAuth2UserInfoFactory;
+import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.user.entity.UserEntity;
 import com.example.education_system.user.entity.UserRole;
 import com.example.education_system.user.repository.UserRepository;
@@ -40,12 +41,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     // Create new user if not exists
                     String name = oAuth2UserInfo.getName()+new Random().nextInt(900000) + 100000;
                     String password = "OAUTH_USER";
-                    String picture = oAuth2UserInfo.getImageUrl();
+                    String url = oAuth2UserInfo.getImageUrl();
                     UserEntity newUser = new UserEntity();
                     newUser.setEmail(email);
                     newUser.setUsername(name);
                     newUser.setPassword(pswdEncoder.encode(password));
-                    newUser.setProfileUrl(picture);
+                    newUser.setImageFile(new FileInfo("","",url,""));
                     newUser.setRoles(Set.of(UserRole.ROLE_STUDENT));
                     return userRepository.save(newUser);
                 });

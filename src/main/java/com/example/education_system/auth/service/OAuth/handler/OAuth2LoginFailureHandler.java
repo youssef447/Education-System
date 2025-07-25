@@ -1,5 +1,6 @@
 package com.example.education_system.auth.service.OAuth.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
@@ -8,22 +9,35 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class OAuth2LoginFailureHandler implements AuthenticationFailureHandler {
+    private final ObjectMapper objectMapper;
+
+    public OAuth2LoginFailureHandler(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
                                         HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Authentication Failed");
         response.setContentType("application/json");
-        String errorMsg = "Login Failed: ";
-        if (exception instanceof OAuth2AuthenticationException oAuth2Ex) {
-            errorMsg += oAuth2Ex.getError().getErrorCode();
-            response.getWriter().write("{\"error\": \"" + errorMsg + "\"}");
+
+        if (exception instanceof OAuth2AuthenticationException) {
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+            errorResponse.put("message", ((OAuth2AuthenticationException) exception).getError().getErrorCode());
         } else {
-            response.getWriter().write("{\"error\": \"" + exception.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            errorResponse.put("message", exception.getMessage());
+
         }
+        objectMapper.writeValue(response.getOutputStream(), errorResponse);
+
 
     }
 }

@@ -4,6 +4,7 @@ import com.example.education_system.category.CategoryEntity;
 import com.example.education_system.category.CategoryRepository;
 import com.example.education_system.config.exceptions.classes.CourseCodeAlreadyExistsException;
 import com.example.education_system.config.exceptions.classes.CourseNotFoundException;
+import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.config.services.FileStorageService;
 import com.example.education_system.course.dto.CourseRequestDto;
 import com.example.education_system.course.dto.CourseResponseDto;
@@ -42,8 +43,8 @@ public class CourseService {
         CourseEntity entity = courseMapper.toEntity(request);
         MultipartFile imageFile = request.getThumbnailFile();
         if (imageFile != null && !imageFile.isEmpty()) {
-            String url = fileStorageService.store(imageFile);
-            entity.setThumbnailUrl(url);
+            FileInfo thumbnailFile = fileStorageService.store(imageFile);
+            entity.setThumbnailFile(thumbnailFile);
         }
         CourseEntity course = courseRepository.save(entity);
         return courseMapper.toDto(course);
@@ -67,8 +68,8 @@ public class CourseService {
 
         MultipartFile imageFile = request.getThumbnailFile();
         if (imageFile != null && !imageFile.isEmpty()) {
-            String url = fileStorageService.store(imageFile);
-            existing.setThumbnailUrl(url);
+            FileInfo thumbnailFile = fileStorageService.store(imageFile);
+            existing.setThumbnailFile(thumbnailFile);
         }
 
 

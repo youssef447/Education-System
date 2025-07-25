@@ -1,6 +1,7 @@
 package com.example.education_system.user.entity;
 
 import com.example.education_system.config.audit.AuditBaseEntity;
+import com.example.education_system.config.services.FileInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +29,8 @@ public class UserEntity extends AuditBaseEntity<Long> implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
-    private String profileUrl;
+    @Embedded
+    private FileInfo imageFile;
 
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles = Set.of(UserRole.ROLE_STUDENT);

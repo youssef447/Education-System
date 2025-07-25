@@ -2,6 +2,7 @@ package com.example.education_system.category;
 
 
 import com.example.education_system.config.audit.AuditBaseEntity;
+import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.course.entity.CourseEntity;
 import jakarta.persistence.*;
 
@@ -22,7 +23,7 @@ public class CategoryEntity extends AuditBaseEntity<Long> {
 
     private String name;
     private String description;
-    private String iconUrl;
+    private FileInfo iconFile;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<CourseEntity> courses;

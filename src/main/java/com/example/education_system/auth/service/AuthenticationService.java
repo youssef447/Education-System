@@ -5,6 +5,7 @@ import com.example.education_system.auth.dto.LoginResponseDto;
 import com.example.education_system.config.exceptions.classes.EmailAlreadyException;
 import com.example.education_system.config.exceptions.classes.UsernameAlreadyExistsException;
 import com.example.education_system.config.security.utils.JwtUtil;
+import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.config.services.FileStorageService;
 import com.example.education_system.auth.dto.UserRequestDTO;
 import com.example.education_system.auth.dto.LoginDto;
@@ -49,8 +50,8 @@ public class AuthenticationService {
 
         UserEntity userEntity = userMapper.toEntity(request);
         if (imageFile != null && !imageFile.isEmpty()) {
-            String url = fileStorageService.store(imageFile);
-            userEntity.setProfileUrl(url);
+            FileInfo fileInfo = fileStorageService.store(imageFile);
+            userEntity.setImageFile(fileInfo);
         }
         repository.save(userEntity);
 

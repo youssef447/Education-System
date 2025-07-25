@@ -2,8 +2,8 @@ package com.example.education_system.category;
 
 import com.example.education_system.config.exceptions.classes.CategoryAlreadyExistsException;
 import com.example.education_system.config.exceptions.classes.CategoryNotFound;
-import com.example.education_system.config.exceptions.classes.CourseNotFoundException;
 
+import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.config.services.FileStorageService;
 import com.example.education_system.course.dto.CourseResponseDto;
 import com.example.education_system.course.entity.CourseEntity;
@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Validated
@@ -37,8 +36,8 @@ public class CategoryService {
         CategoryEntity entity = categoryMapper.toEntity(request);
         MultipartFile imageFile = request.getImageFile();
         if (imageFile != null && !imageFile.isEmpty()) {
-            String url = fileStorageService.store(imageFile);
-            entity.setIconUrl(url);
+            FileInfo iconFile = fileStorageService.store(imageFile);
+            entity.setIconFile(iconFile);
         }
         CategoryEntity persisted = categoryRepository.save(entity);
         return categoryMapper.toDTO(persisted);
@@ -60,8 +59,8 @@ public class CategoryService {
         existing.setName(request.getName());
         MultipartFile imageFile = request.getImageFile();
         if (imageFile != null && !imageFile.isEmpty()) {
-            String url = fileStorageService.store(imageFile);
-            existing.setIconUrl(url);
+            FileInfo iconFile = fileStorageService.store(imageFile);
+            existing.setIconFile(iconFile);
         }
 
         categoryRepository.save(existing);

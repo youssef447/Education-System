@@ -15,9 +15,8 @@ import java.util.Map;
 public class FileStorageService {
 
     private final Cloudinary cloudinary;
-    private final StorageRepository storageRepository;
 
-    public String store(MultipartFile file) {
+    public FileInfo store(MultipartFile file) {
         validateFileType(file);
 
 
@@ -26,19 +25,17 @@ public class FileStorageService {
             String secureUrl = uploadResult.get("secure_url").toString();
             String publicId = uploadResult.get("public_id").toString();
             String fileSize = formatSize(file.getSize());
-            StorageEntity entity = StorageEntity.builder().url(secureUrl).publicId(publicId).size(fileSize).build();
-            storageRepository.save(entity);
-            return secureUrl;
+            String format = uploadResult.get("format").toString();
+
+            return new FileInfo(format, publicId, secureUrl, fileSize);
         } catch (IOException e) {
             throw new FileUploadException("Failed to upload file");
         }
     }
 
-    public void delete(String url) {
+    public void delete(String publicId) {
         try {
-            String publicId = storageRepository.findPublicIdByUrl(url);
             cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
-            storageRepository.deleteByPublicId(publicId);
         } catch (IOException e) {
             throw new FileUploadException("Failed to delete file");
         }
