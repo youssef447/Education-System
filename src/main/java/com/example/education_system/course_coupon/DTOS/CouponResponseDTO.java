@@ -1,12 +1,14 @@
 package com.example.education_system.course_coupon.DTOS;
 
-import lombok.Builder;
+import com.example.education_system.course_coupon.entity.CouponEntity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
 public record CouponResponseDTO(Long id,
                                 String code,
+                                CouponEntity.CouponType type,
                                 LocalDateTime expirationDate,
-                                int courseId, int discountValue) {
+                                int courseId, BigDecimal discountPercentage) {
 }

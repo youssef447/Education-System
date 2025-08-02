@@ -2,6 +2,11 @@
 
 package com.example.education_system.payment.service;
 
+import com.example.education_system.config.exceptions.classes.OrderNotFoundException;
+import com.example.education_system.course_coupon.entity.CouponEntity;
+import com.example.education_system.course_coupon.repository.CouponRepository;
+import com.example.education_system.order.OrderEntity;
+import com.example.education_system.order.OrderRepository;
 import com.example.education_system.payment.dto.PaymentRequestDto;
 import com.example.education_system.payment.dto.PaymentResponseDto;
 
@@ -17,21 +22,31 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 public class StripeSessionPaymentService implements PaymentService {
+    private final OrderRepository orderRepository;
+    private final CouponRepository couponRepository;
 
 
     public PaymentResponseDto pay(PaymentRequestDto paymentRequest) throws StripeException {
+        OrderEntity order = orderRepository.findById(paymentRequest.orderId()).
+                orElseThrow(OrderNotFoundException::new);
+
+        BigDecimal totalPrice = order.getTotalPrice();
+        CouponEntity coupon = order.getAppliedCoupon();
+        if (coupon != null) {
+            totalPrice = totalPrice.subtract((coupon.getDiscountPercentage().divide(BigDecimal.valueOf(100))).multiply(totalPrice));
+        }
 
         // Create a PaymentIntent with the order amount and currency
         SessionCreateParams.LineItem.PriceData.ProductData productData =
                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                        .setName(paymentRequest.courseCode())
+                        .setName("#" + paymentRequest.orderId())
                         .build();
 
         // Create new line item with the above product data and associated price
         SessionCreateParams.LineItem.PriceData priceData =
                 SessionCreateParams.LineItem.PriceData.builder()
                         .setCurrency(paymentRequest.currency().name())
-                        .setUnitAmount(paymentRequest.amount()*100)
+                        .setUnitAmount(totalPrice.multiply(BigDecimal.valueOf(100)).longValue())
                         .setProductData(productData)
                         .build();
 
@@ -39,7 +54,7 @@ public class StripeSessionPaymentService implements PaymentService {
         SessionCreateParams.LineItem lineItem =
                 SessionCreateParams
                         .LineItem.builder()
-                        .setQuantity(paymentRequest.quantity())
+                        //.setQuantity(paymentRequest.quantity())
                         .setPriceData(priceData)
                         .build();
 

@@ -106,6 +106,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(statusCode).body(response);
     }
 
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<?> handleOrderNotFoundErrors(OrderNotFoundException ex) {
+        int statusCode = HttpStatus.SC_NOT_FOUND;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
     @ExceptionHandler(CouponAlreadySentToMail.class)
     public ResponseEntity<?> handleNoCouponAlreadySentToMailErrors(CouponAlreadySentToMail ex) {
         int statusCode = HttpStatus.SC_BAD_REQUEST;

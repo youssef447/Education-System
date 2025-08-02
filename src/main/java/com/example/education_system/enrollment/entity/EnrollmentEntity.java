@@ -32,6 +32,7 @@ public class EnrollmentEntity extends AuditBaseEntity<Long> {
     private EnrollmentStatus status;
 
     public enum EnrollmentStatus {
+
         ACTIVE,
         COMPLETED,
     }

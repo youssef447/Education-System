@@ -6,6 +6,7 @@ import com.example.education_system.course.entity.CourseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class CouponEntity extends AuditBaseEntity<Long> {
     LocalDateTime expirationDate;
 
     @Column(nullable = false)
-    private Double discountPercentage;
+    private BigDecimal discountPercentage;
 
     private boolean active = true;
 

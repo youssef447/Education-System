@@ -1,9 +1,0 @@
-services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=education system'
-      - 'POSTGRES_PASSWORD=STILLSTRONG2333'
-      - 'POSTGRES_USER=postgres'
-    ports:
-      - '5432'

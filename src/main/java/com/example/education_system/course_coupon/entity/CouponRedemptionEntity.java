@@ -24,4 +24,6 @@ public class CouponRedemptionEntity extends AuditBaseEntity<Long> {
     private UserEntity user;
 
 
+
+
 }

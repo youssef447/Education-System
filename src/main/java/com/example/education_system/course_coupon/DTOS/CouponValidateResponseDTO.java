@@ -14,6 +14,6 @@ import java.math.BigDecimal;
 public class CouponValidateResponseDTO {
     private BigDecimal discountedPrice;
     private BigDecimal originalPrice;
-    private Double discountPercentage;
+    private BigDecimal discountPercentage;
     private boolean valid = true;
 }

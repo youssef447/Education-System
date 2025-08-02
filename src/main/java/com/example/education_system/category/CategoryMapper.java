@@ -8,6 +8,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
+    @Mapping(target = "iconUrl",source = "iconFile.url")
     CategoryResponseDto toDTO(CategoryEntity entity);
 
     @Mapping(target="iconFile",ignore = true)

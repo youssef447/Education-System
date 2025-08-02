@@ -25,7 +25,7 @@ public class OrderEntity extends AuditBaseEntity<Long> {
     private OrderStatus status = OrderStatus.PENDING;
 
     @Column(nullable = false)
-    private BigDecimal total;
+    private BigDecimal totalPrice;
 
 
     /// RELATIONS

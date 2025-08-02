@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,7 +20,7 @@ public class CouponRequestDTO {
     @NotNull(message = "expiration date is required")
     LocalDateTime expirationDate;
     @NotNull(message = "discount percentage is required")
-    private Double discountPercentage;
+    private BigDecimal discountPercentage;
     @NotBlank(message = "coupon type is required")
     String couponType;
     //optional

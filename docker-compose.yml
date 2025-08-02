@@ -1,0 +1,81 @@
+services:
+  app:
+    image: edu_sys
+    ports:
+      - "8090:8080"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 10
+      replicas: 2
+
+    secrets:
+      - DB_URL
+      - DB_USER
+      - DB_PASS
+      - CLOUDINARY_CLOUD_NAME
+      - CLOUDINARY_API_KEY
+      - CLOUDINARY_API_SECRET
+      - MAIL_USERNAME
+      - MAIL_PASS
+      - STRIPE_SECRET
+      - WEBHOOK_SECRET
+      - GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET
+      - GOOGLE_SCOPES
+
+
+
+  postgres:
+    image: postgres:17
+    restart: always
+    networks:
+      - app-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: STILLSTRONG2333
+      POSTGRES_DB: education_system
+
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+secrets:
+  DB_URL:
+    external: true
+  DB_USER:
+    external: true
+  DB_PASS:
+    external: true
+  CLOUDINARY_CLOUD_NAME:
+    external: true
+  CLOUDINARY_API_KEY:
+    external: true
+  CLOUDINARY_API_SECRET:
+    external: true
+  MAIL_USERNAME:
+    external: true
+  MAIL_PASS:
+    external: true
+  STRIPE_SECRET:
+    external: true
+  WEBHOOK_SECRET:
+    external: true
+  GOOGLE_CLIENT_ID:
+    external: true
+  GOOGLE_CLIENT_SECRET:
+    external: true
+  GOOGLE_SCOPES:
+    external: true
+
+networks:
+  app-network:
+    driver: overlay
+    attachable: true

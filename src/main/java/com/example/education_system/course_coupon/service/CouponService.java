@@ -186,8 +186,8 @@ public class CouponService {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase();
     }
 
-    private BigDecimal calculateDiscount(BigDecimal total, double discountPercentage) {
-        BigDecimal discount = BigDecimal.valueOf(discountPercentage)
+    private BigDecimal calculateDiscount(BigDecimal total, BigDecimal discountPercentage) {
+        BigDecimal discount =discountPercentage
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
         return total.multiply(BigDecimal.ONE.subtract(discount));
     }

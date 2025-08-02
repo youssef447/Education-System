@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Component
@@ -19,7 +20,7 @@ public class CouponSeeder implements CommandLineRunner {
         if (!couponRepository.existsByCode("WELCOME0000")) {
             CouponEntity welcomeCoupon = CouponEntity.builder()
                     .code("WELCOME0000").type(CouponEntity.CouponType.GLOBAL)
-                    .discountPercentage(5.0)
+                    .discountPercentage(BigDecimal.valueOf(5.0))
                     .active(true)
                     .build();
             couponRepository.save(welcomeCoupon);
