@@ -5,15 +5,14 @@ services:
       - "8090:8080"
     depends_on:
       - postgres
-    networks:
-      - app-network
-
+#    networks:
+#      - app-network
     deploy:
       restart_policy:
         condition: on-failure
         delay: 10s
         max_attempts: 10
-      replicas: 2
+      replicas: 1
 
     secrets:
       - DB_URL
@@ -35,8 +34,8 @@ services:
   postgres:
     image: postgres:17
     restart: always
-    networks:
-      - app-network
+#    networks:
+#      - app-network
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: STILLSTRONG2333
@@ -46,6 +45,10 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+
+
+
 
 secrets:
   DB_URL:
@@ -75,7 +78,10 @@ secrets:
   GOOGLE_SCOPES:
     external: true
 
-networks:
-  app-network:
-    driver: overlay
-    attachable: true
+#networks:
+#  app-network:
+#    driver: overlay
+#    attachable: true
+
+volumes:
+  postgres_data:

@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -20,9 +19,9 @@ import java.util.Set;
 public class CategoryEntity extends AuditBaseEntity<Long> {
     @NotNull(message = "category name is required")
     @Column(nullable = false, unique = true)
-
     private String name;
     private String description;
+    @Embedded
     private FileInfo iconFile;
 
     @ManyToMany(fetch = FetchType.LAZY)

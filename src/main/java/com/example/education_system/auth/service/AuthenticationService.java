@@ -37,7 +37,7 @@ public class AuthenticationService {
 
     @Transactional
     public UserResponseDto register(UserRequestDTO request, MultipartFile imageFile) {
-// if email already exists
+        // if email already exists
         if (repository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyException();
         }
