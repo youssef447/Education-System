@@ -2,9 +2,10 @@ package com.example.education_system.course_coupon.controller;
 
 import com.example.education_system.config.response.ApiResponseBody;
 import com.example.education_system.course_coupon.DTOS.CouponRedeemRequestDTO;
+import com.example.education_system.course_coupon.DTOS.CouponRedeemResponseDTO;
 import com.example.education_system.course_coupon.DTOS.CouponRequestDTO;
 import com.example.education_system.course_coupon.DTOS.CouponRegisterRequestDTO;
-import com.example.education_system.course_coupon.DTOS.CouponValidateResponseDTO;
+import com.example.education_system.course_coupon.DTOS.CouponRedeemResponseDTO;
 import com.example.education_system.course_coupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,7 +56,7 @@ public class CouponController {
     @PostMapping("/validate")
     @PreAuthorize("hasRole('USER')")
     ApiResponseBody validateCoupon(@RequestBody CouponRedeemRequestDTO request) {
-        CouponValidateResponseDTO result = couponService.validateCoupon(request);
+        CouponRedeemResponseDTO result = couponService.validateCoupon(request);
         return new ApiResponseBody("coupon updated successfully", result, true);
     }
 }

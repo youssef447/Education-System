@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class StripeWebhookController {
     private final WebhookService webhookService;
+
     @PostMapping("/checkout")
     public ResponseEntity<String> checkoutEvent(
             @RequestBody String payload,
             @RequestHeader("Stripe-Signature") String sigHeader
     ) throws SignatureVerificationException {
-        return webhookService.handleStripeEvent(payload,sigHeader);
+        return webhookService.handleStripeEvent(payload, sigHeader);
 
     }
 }

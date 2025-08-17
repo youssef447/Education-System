@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CouponValidateResponseDTO {
+public class CouponRedeemResponseDTO {
     private BigDecimal discountedPrice;
     private BigDecimal originalPrice;
     private BigDecimal discountPercentage;
-    private boolean valid = true;
+
 }

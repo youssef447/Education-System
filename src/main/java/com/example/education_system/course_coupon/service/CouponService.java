@@ -78,8 +78,6 @@ public class CouponService {
                 "Enjoy your shopping!";
 
         emailService.sendEmail(request.getEmail(), "Coupon Discount", message);
-
-
     }
 
     public void update(@Valid CouponRequestDTO request, Long id) {
@@ -108,7 +106,7 @@ public class CouponService {
     }
 
 
-    public CouponValidateResponseDTO validateCoupon(@Valid CouponRedeemRequestDTO request) {
+    public CouponRedeemResponseDTO validateCoupon(@Valid CouponRedeemRequestDTO request) {
         if (request.getCode().equals("WELCOME0000")) {
             return validateWelcomeCoupon(request);
         }
@@ -116,7 +114,10 @@ public class CouponService {
 
     }
 
-    private CouponValidateResponseDTO validateWelcomeCoupon(CouponRedeemRequestDTO request) {
+
+    /// HELPERS
+
+    private CouponRedeemResponseDTO validateWelcomeCoupon(CouponRedeemRequestDTO request) {
         UserEntity user = userRepository.findByEmail(userService.getCurrentUser().getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
@@ -125,7 +126,7 @@ public class CouponService {
         }
         String coupon = request.getCode();
         CouponEntity entity = couponRepository.findByCode(coupon).orElseThrow(CouponNotFound::new);
-        //temporarily disabled by admin
+        //if temporarily disabled by admin
         if (!entity.isActive()) {
             throw new CouponWelcomeNotActive();
         }
@@ -135,28 +136,18 @@ public class CouponService {
 
         BigDecimal discountedPrice = calculateDiscount(total, entity.getDiscountPercentage());
 
-        return CouponValidateResponseDTO.builder().valid(true)
+        return CouponRedeemResponseDTO.builder()
                 .discountPercentage(entity.getDiscountPercentage()).originalPrice(total)
                 .discountedPrice(discountedPrice).build();
     }
 
-    private CouponValidateResponseDTO validateCourseCoupon(CouponRedeemRequestDTO request) {
+    private CouponRedeemResponseDTO validateCourseCoupon(CouponRedeemRequestDTO request) {
         String coupon = request.getCode();
 
         //throw if coupon not exists
         CouponEntity entity = couponRepository.findByCode(coupon).orElseThrow(CouponNotFound::new);
 
 
-        ////Global
-        if (entity.getType() == CouponEntity.CouponType.GLOBAL) {
-            if (!entity.isActive()) {
-                throw new CouponWelcomeNotActive();
-            }
-            return CouponValidateResponseDTO.builder().valid(true)
-                    .discountPercentage(entity.getDiscountPercentage()).build();
-        }
-
-        ////COURSE-SPECIFIC
         //throw if coupon not for given course
         if (entity.getCourse().getId().longValue() != request.getCourseId().longValue()) {
             throw new CouponNotFound();
@@ -165,29 +156,29 @@ public class CouponService {
         if (entity.getExpirationDate().isBefore(LocalDateTime.now())) {
             throw new CouponExpiredException();
         }
-        BigDecimal total = courseRepository.findPriceById(request.getCourseId())
-                .orElseThrow(CourseNotFoundException::new);
-
-        //temporarily disabled by admin
+        //throw temporarily disabled by admin
         if (!entity.isActive()) {
             throw new CouponWelcomeNotActive();
         }
+        BigDecimal total = courseRepository.findPriceById(request.getCourseId())
+                .orElseThrow(CourseNotFoundException::new);
+
+
         BigDecimal discountedPrice = calculateDiscount(total, entity.getDiscountPercentage());
 
 
-        return CouponValidateResponseDTO.builder().valid(true)
+        return CouponRedeemResponseDTO.builder()
                 .discountPercentage(entity.getDiscountPercentage()).originalPrice(total)
                 .discountedPrice(discountedPrice).build();
     }
 
 
-    /// HELPERS
     private String generateCode() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase();
     }
 
     private BigDecimal calculateDiscount(BigDecimal total, BigDecimal discountPercentage) {
-        BigDecimal discount =discountPercentage
+        BigDecimal discount = discountPercentage
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
         return total.multiply(BigDecimal.ONE.subtract(discount));
     }

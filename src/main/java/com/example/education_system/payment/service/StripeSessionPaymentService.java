@@ -2,9 +2,11 @@
 
 package com.example.education_system.payment.service;
 
+import com.example.education_system.config.exceptions.classes.CouponNotFound;
 import com.example.education_system.config.exceptions.classes.OrderNotFoundException;
 import com.example.education_system.course_coupon.entity.CouponEntity;
 import com.example.education_system.course_coupon.repository.CouponRepository;
+import com.example.education_system.course_coupon.service.CouponService;
 import com.example.education_system.order.OrderEntity;
 import com.example.education_system.order.OrderRepository;
 import com.example.education_system.payment.dto.PaymentRequestDto;
@@ -18,11 +20,13 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Service
 @RequiredArgsConstructor
 public class StripeSessionPaymentService implements PaymentService {
     private final OrderRepository orderRepository;
+    private final CouponService couponService;
     private final CouponRepository couponRepository;
 
 
@@ -31,22 +35,25 @@ public class StripeSessionPaymentService implements PaymentService {
                 orElseThrow(OrderNotFoundException::new);
 
         BigDecimal totalPrice = order.getTotalPrice();
-        CouponEntity coupon = order.getAppliedCoupon();
+
+        // Apply Coupon
+        CouponEntity coupon = couponRepository.findByCode(paymentRequest.coupon())
+                .orElseThrow(CouponNotFound::new);
         if (coupon != null) {
-            totalPrice = totalPrice.subtract((coupon.getDiscountPercentage().divide(BigDecimal.valueOf(100))).multiply(totalPrice));
+            totalPrice = calculateDiscount(totalPrice, coupon.getDiscountPercentage());
         }
 
-        // Create a PaymentIntent with the order amount and currency
+        // Prepare product data
         SessionCreateParams.LineItem.PriceData.ProductData productData =
                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
                         .setName("#" + paymentRequest.orderId())
                         .build();
 
-        // Create new line item with the above product data and associated price
+        // Prepare price data with the above product data and associated price
         SessionCreateParams.LineItem.PriceData priceData =
                 SessionCreateParams.LineItem.PriceData.builder()
-                        .setCurrency(paymentRequest.currency().name())
-                        .setUnitAmount(totalPrice.multiply(BigDecimal.valueOf(100)).longValue())
+                        .setCurrency(paymentRequest.currency().name()).
+                        setUnitAmountDecimal(totalPrice)
                         .setProductData(productData)
                         .build();
 
@@ -64,6 +71,12 @@ public class StripeSessionPaymentService implements PaymentService {
                         .setMode(SessionCreateParams.Mode.PAYMENT)
                         .setSuccessUrl("http://localhost:8080/course/payment/success?session_id={CHECKOUT_SESSION_ID}")
                         .setCancelUrl("http://localhost:8080/course/payment/fail")
+                        .setPaymentIntentData(
+                                SessionCreateParams.PaymentIntentData.builder()
+                                        .putMetadata("order_id", paymentRequest.orderId().toString())
+                                        .putMetadata("price", String.valueOf(totalPrice))
+                                        .build()
+                        )
                         .addLineItem(lineItem)
                         .build();
 
@@ -77,5 +90,9 @@ public class StripeSessionPaymentService implements PaymentService {
                 .build();
     }
 
-
+    private BigDecimal calculateDiscount(BigDecimal total, BigDecimal discountPercentage) {
+        BigDecimal discount = discountPercentage
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        return total.multiply(BigDecimal.ONE.subtract(discount)).setScale(0, RoundingMode.HALF_UP);
+    }
 }

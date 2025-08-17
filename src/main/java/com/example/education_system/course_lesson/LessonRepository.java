@@ -12,7 +12,6 @@ import java.util.List;
 public interface LessonRepository extends JpaRepository<LessonEntity, Long> {
 
     Page<LessonEntity> findByClassEntityIdOrderByOrderNumber(Long classEntityId, Pageable pageable);
-
     List<LessonEntity> findByClassEntityIdOrderByOrderNumber(Long classEntityId);
 
 }

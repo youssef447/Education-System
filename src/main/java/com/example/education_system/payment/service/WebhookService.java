@@ -1,5 +1,8 @@
 package com.example.education_system.payment.service;
 
+import com.example.education_system.config.exceptions.classes.OrderNotFoundException;
+import com.example.education_system.order.OrderEntity;
+import com.example.education_system.order.OrderRepository;
 import com.example.education_system.payment.entity.Currency;
 import com.example.education_system.payment.entity.PaymentEntity;
 import com.example.education_system.payment.entity.PaymentStatus;
@@ -9,6 +12,7 @@ import com.example.education_system.user.service.UserService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.EventDataObjectDeserializer;
+import com.stripe.model.PaymentIntent;
 import com.stripe.model.StripeObject;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
@@ -27,6 +31,8 @@ import java.math.RoundingMode;
 @RequiredArgsConstructor
 public class WebhookService {
     private final PaymentRepository paymentRepository;
+    private final OrderRepository orderRepository;
+
     private final UserService UserService;
     @Value("${stripe.webhook.secret}")
     private String endpointSecret;
@@ -45,8 +51,8 @@ public class WebhookService {
         );
 
 
-        if ("checkout.session.completed".equals(event.getType())) {
-            StripeObject stripeObject = null;
+        if ("payment_intent.succeeded".equals(event.getType())) {
+            StripeObject stripeObject;
             EventDataObjectDeserializer dataObjectDeserializer = event.getDataObjectDeserializer();
             if (dataObjectDeserializer.getObject().isPresent()) {
                 stripeObject = dataObjectDeserializer.getObject().get();
@@ -54,10 +60,9 @@ public class WebhookService {
                 return ResponseEntity.badRequest().body("Unable to deserialize payment intent from event");
 
             }
-            if (stripeObject instanceof Session && ((Session) stripeObject).getPaymentStatus().equals("paid")) {
-
-                savePayment((Session)stripeObject);
-                // TODO saveOrder and save coupon redemption if exists
+            if (stripeObject instanceof PaymentIntent intent) {
+                saveOrder(intent);
+                savePayment(intent);
             }
 
         }
@@ -65,21 +70,33 @@ public class WebhookService {
         return ResponseEntity.ok("");
     }
 
-    private void savePayment(Session session) {
-        Long amountTotal = session.getAmountTotal(); // In cents
-        String currency = session.getCurrency();
-        //String customerEmail = session.getCustomerDetails().getEmail();
+    private void savePayment(PaymentIntent intent) {
+        String currency = intent.getCurrency();
         UserEntity user = UserService.getCurrentUser();
-        BigDecimal dividedAmount = BigDecimal.valueOf(amountTotal)
-                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-
-        //payment data
+        String price = intent.getMetadata().get("price");
         PaymentEntity payment = new PaymentEntity();
-        payment.setAmount(dividedAmount);
+        payment.setAmount((BigDecimal.valueOf(Long.parseLong(price))));
         payment.setCurrency(Currency.valueOf(currency.toUpperCase()));
         payment.setStatus(PaymentStatus.SUCCESS);
         payment.setUser(user);
         paymentRepository.save(payment);
+    }
+
+    private void saveOrder(PaymentIntent intent) {
+        String orderIdStr = intent.getMetadata().get("order_id");
+        String price = intent.getMetadata().get("price");
+        Long orderId = Long.parseLong(orderIdStr);
+        OrderEntity order = getCurrentOrder(orderId);
+        order.setStatus(OrderEntity.OrderStatus.PAID);
+        order.setTotalPrice(BigDecimal.valueOf(Long.parseLong(price)));
+        orderRepository.save(order);
+
+    }
+
+
+    private OrderEntity getCurrentOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(OrderNotFoundException::new);
     }
 
 }

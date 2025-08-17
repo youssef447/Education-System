@@ -1,7 +1,6 @@
 package com.example.education_system.order;
 
 import com.example.education_system.config.audit.AuditBaseEntity;
-import com.example.education_system.course_coupon.entity.CouponEntity;
 import com.example.education_system.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,8 +35,7 @@ public class OrderEntity extends AuditBaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemEntity> items = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private CouponEntity appliedCoupon;
+
 
 
 
