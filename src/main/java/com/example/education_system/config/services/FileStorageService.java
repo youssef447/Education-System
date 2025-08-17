@@ -9,10 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class FileStorageService {
+
+
 
     private final Cloudinary cloudinary;
 
@@ -45,10 +48,8 @@ public class FileStorageService {
     private void validateFileType(MultipartFile file) {
         String contentType = file.getContentType();
         if (contentType == null ||
-                (!contentType.startsWith("image/") &&
-                        !contentType.startsWith("video/") &&
-                        !contentType.equals("application/pdf"))) {
-            throw new FileUploadException("Only images, videos, and PDFs are allowed");
+                !ALLOWED_TYPES.contains(contentType)) {
+            throw new FileUploadException("File type not allowed");
         }
     }
 

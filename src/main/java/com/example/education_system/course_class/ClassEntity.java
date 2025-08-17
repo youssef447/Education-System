@@ -17,9 +17,15 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassEntity extends AuditBaseEntity<Long> {
+public class ClassEntity extends AuditBaseEntity {
+    @Column(nullable = false)
     private String name;
     private String description;
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "classEntity",cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<LessonEntity> lessons;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id")
+    private CourseEntity course;
 }

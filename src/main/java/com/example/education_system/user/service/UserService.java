@@ -1,7 +1,7 @@
 package com.example.education_system.user.service;
 
 
-import com.example.education_system.auth.dto.UserRequestDTO;
+import com.example.education_system.auth.dto.RegisterRequestDTO;
 import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.config.services.FileStorageService;
 import com.example.education_system.user.dto.UserResponseDto;
@@ -44,7 +44,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto updateUser(Long id, UserRequestDTO request, MultipartFile imageFile) {
+    public UserResponseDto updateUser(Long id, RegisterRequestDTO request, MultipartFile imageFile) {
         UserEntity existing = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User '" + request.getUsername() + "' not found"));
 

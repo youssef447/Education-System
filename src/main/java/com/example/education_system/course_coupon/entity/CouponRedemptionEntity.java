@@ -12,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CouponRedemptionEntity extends AuditBaseEntity<Long> {
+public class CouponRedemptionEntity extends AuditBaseEntity {
 
 
     @ManyToOne(fetch = FetchType.LAZY)

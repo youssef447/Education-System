@@ -20,7 +20,7 @@ import com.stripe.model.LineItemCollection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/course")
+@RequestMapping("/payment")
 @RequiredArgsConstructor
 public class PaymentController {
     private final PaymentService paymentService;
@@ -33,7 +33,7 @@ public class PaymentController {
                 .body(stripeResponse);
     }
 
-    @GetMapping("/payment/success")
+    @GetMapping("/success")
     public String success(@RequestParam("session_id") String sessionId, Model model) throws StripeException {
 
         // Step 1: Expand line_items
@@ -60,7 +60,7 @@ public class PaymentController {
         return "success";
     }
 
-    @GetMapping("/payment/fail")
+    @GetMapping("/fail")
     public String fail() {
         return "fail";
     }

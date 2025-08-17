@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BindException.class)
+    //@ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> handleValidationErrors(BindException ex) {
         int statusCode = HttpStatus.SC_BAD_REQUEST;
 
@@ -39,6 +40,14 @@ public class GlobalExceptionHandler {
         String errorMessages = ex.getConstraintViolations().stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.joining(", "));
+        ApiResponseBody response = new ApiResponseBody(errorMessages, false);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(FileUploadException.class)
+    public ResponseEntity<?> handleFileUploadExceptionErrors(FileUploadException ex) {
+        int statusCode = HttpStatus.SC_BAD_REQUEST;
+        String errorMessages = ex.getMessage();
         ApiResponseBody response = new ApiResponseBody(errorMessages, false);
         return ResponseEntity.status(statusCode).body(response);
     }

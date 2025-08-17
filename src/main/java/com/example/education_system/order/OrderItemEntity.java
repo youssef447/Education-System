@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderItemEntity extends AuditBaseEntity<Long> {
+public class OrderItemEntity extends AuditBaseEntity {
 
 
     @Column(nullable = false)

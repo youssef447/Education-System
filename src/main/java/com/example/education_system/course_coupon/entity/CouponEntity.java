@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CouponEntity extends AuditBaseEntity<Long> {
+public class CouponEntity extends AuditBaseEntity {
 
     @Column(nullable = false, unique = true)
     private String code;

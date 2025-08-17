@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CouponUserRequestDTO {
+public class CouponRegisterRequestDTO {
     @NotBlank(message = "email is required")
     String email;
 

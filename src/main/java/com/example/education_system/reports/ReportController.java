@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/reports")
+@RequestMapping("/report")
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('ADMIN')")
 public class ReportController {

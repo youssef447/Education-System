@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartItemEntity extends AuditBaseEntity<Long> {
+public class CartItemEntity extends AuditBaseEntity {
     @JoinColumn(nullable = false)
 
     private BigDecimal currentPrice;

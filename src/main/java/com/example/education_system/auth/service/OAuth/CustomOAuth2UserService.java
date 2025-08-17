@@ -7,6 +7,7 @@ import com.example.education_system.user.entity.UserEntity;
 import com.example.education_system.user.entity.UserRole;
 import com.example.education_system.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -32,24 +33,30 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = request.getClientRegistration().getRegistrationId();
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, attributes);
         String email = oAuth2UserInfo.getEmail();
-        if(userRepository.existsByEmail(email)){
+
+        UserEntity user;
+        if (userRepository.existsByEmail(email)) {
             //Goes to OAuth Failure Handler
-            throw new OAuth2AuthenticationException("email already registered, please login");
+            // throw new OAuth2AuthenticationException("email already registered, please login");
+
+            user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        } else {
+            user = userRepository.findByEmail(email)
+                    .orElseGet(() -> {
+                        // Create new user if not exists
+                        String name = oAuth2UserInfo.getName() + new Random().nextInt(900000) + 100000;
+                        String password = "OAUTH_USER";
+                        String url = oAuth2UserInfo.getImageUrl();
+                        UserEntity newUser = new UserEntity();
+                        newUser.setEmail(email);
+                        newUser.setUsername(name);
+                        newUser.setPassword(pswdEncoder.encode(password));
+                        newUser.setImageFile(new FileInfo("", "", url, ""));
+                        newUser.setRoles(Set.of(UserRole.ROLE_STUDENT));
+                        return userRepository.save(newUser);
+                    });
         }
-        UserEntity user = userRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    // Create new user if not exists
-                    String name = oAuth2UserInfo.getName()+new Random().nextInt(900000) + 100000;
-                    String password = "OAUTH_USER";
-                    String url = oAuth2UserInfo.getImageUrl();
-                    UserEntity newUser = new UserEntity();
-                    newUser.setEmail(email);
-                    newUser.setUsername(name);
-                    newUser.setPassword(pswdEncoder.encode(password));
-                    newUser.setImageFile(new FileInfo("","",url,""));
-                    newUser.setRoles(Set.of(UserRole.ROLE_STUDENT));
-                    return userRepository.save(newUser);
-                });
+
 
         return new DefaultOAuth2User(user.getAuthorities(), attributes, "email");
     }

@@ -7,7 +7,7 @@ import com.example.education_system.config.exceptions.classes.UsernameAlreadyExi
 import com.example.education_system.config.security.utils.JwtUtil;
 import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.config.services.FileStorageService;
-import com.example.education_system.auth.dto.UserRequestDTO;
+import com.example.education_system.auth.dto.RegisterRequestDTO;
 import com.example.education_system.auth.dto.LoginDto;
 import com.example.education_system.user.dto.UserResponseDto;
 import com.example.education_system.user.entity.UserEntity;
@@ -36,7 +36,7 @@ public class AuthenticationService {
 
 
     @Transactional
-    public UserResponseDto register(UserRequestDTO request, MultipartFile imageFile) {
+    public UserResponseDto register(RegisterRequestDTO request, MultipartFile imageFile) {
         // if email already exists
         if (repository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyException();

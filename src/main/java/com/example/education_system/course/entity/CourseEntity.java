@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseEntity extends AuditBaseEntity<Long> {
+public class CourseEntity extends AuditBaseEntity {
     //Columns
     @Column(nullable = false)
     //@NotNull(message = "title is required")
@@ -40,16 +40,17 @@ public class CourseEntity extends AuditBaseEntity<Long> {
     @JoinTable(
             name = "courses_instructors",
             joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "instructor_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "instructor_id"))
     private Set<UserEntity> instructors;
+
+
 
 
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<CategoryEntity> categories;
 
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<ClassEntity> classes = new HashSet<>();
     @OneToMany(mappedBy = "course")
     private Set<CouponEntity> coupons = new HashSet<>();

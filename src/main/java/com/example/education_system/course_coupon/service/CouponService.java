@@ -64,7 +64,7 @@ public class CouponService {
     }
 
 
-    public void getWelcomeCoupon(@Valid CouponUserRequestDTO request) {
+    public void getWelcomeCoupon(@Valid CouponRegisterRequestDTO request) {
         UserEntity user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
         if (user.getCreatedDate().isBefore(LocalDateTime.now().minusDays(7))) {

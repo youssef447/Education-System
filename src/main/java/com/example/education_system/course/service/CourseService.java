@@ -11,10 +11,15 @@ import com.example.education_system.course.dto.CourseResponseDto;
 import com.example.education_system.course.entity.CourseEntity;
 import com.example.education_system.course.mapper.CourseMapper;
 import com.example.education_system.course.repository.CourseRepository;
+import com.example.education_system.course_lesson.LessonEntity;
 import com.example.education_system.user.entity.UserEntity;
 import com.example.education_system.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,9 +37,16 @@ public class CourseService {
     private final CourseMapper courseMapper;
 
 
-    public List<CourseResponseDto> getAllCourses() {
-        List<CourseEntity> courses = courseRepository.findAll();
-        return courseMapper.toListDto(courses);
+    public Object getAllCourses(Integer page, Integer size) {
+        if (page == null || size == null) {
+            List<CourseEntity> courses = courseRepository.findAll();
+            return courseMapper.toListDto(courses);
+
+        } else {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<CourseEntity> courses = courseRepository.findAll(pageable);
+            return courses.map(courseMapper::toDto);
+        }
     }
 
     public CourseResponseDto addCourse(CourseRequestDto request) {

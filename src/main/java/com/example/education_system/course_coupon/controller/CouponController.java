@@ -3,7 +3,7 @@ package com.example.education_system.course_coupon.controller;
 import com.example.education_system.config.response.ApiResponseBody;
 import com.example.education_system.course_coupon.DTOS.CouponRedeemRequestDTO;
 import com.example.education_system.course_coupon.DTOS.CouponRequestDTO;
-import com.example.education_system.course_coupon.DTOS.CouponUserRequestDTO;
+import com.example.education_system.course_coupon.DTOS.CouponRegisterRequestDTO;
 import com.example.education_system.course_coupon.DTOS.CouponValidateResponseDTO;
 import com.example.education_system.course_coupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
@@ -12,31 +12,32 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/coupons")
+@RequestMapping("/coupon")
 @RequiredArgsConstructor
 public class CouponController {
     private final CouponService couponService;
 
-    @PostMapping("/getWelcomeCoupon")
-    @PreAuthorize("hasRole('USER')")
-    ApiResponseBody getWelcomeCoupon(@RequestBody CouponUserRequestDTO request) {
-        couponService.getWelcomeCoupon(request);
-        return new ApiResponseBody("coupon sent successfully", true);
-    }
-
-    @PostMapping("/get")
+    @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody getAll() {
         return new ApiResponseBody("coupons fetched successfully", couponService.getAll(), true);
     }
 
-    @PostMapping("/add")
+    @GetMapping("/welcome")
+    @PreAuthorize("hasRole('USER')")
+    ApiResponseBody getWelcomeCoupon(@RequestBody CouponRegisterRequestDTO request) {
+        couponService.getWelcomeCoupon(request);
+        return new ApiResponseBody("coupon sent successfully", true);
+    }
+
+
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody add(@RequestBody CouponRequestDTO request) {
         return new ApiResponseBody("coupon added successfully", couponService.add(request), true);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody delete(@PathVariable Long id) {
         couponService.delete(id);
@@ -44,14 +45,14 @@ public class CouponController {
 
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody update(@RequestBody CouponRequestDTO request, @PathVariable Long id) {
         couponService.update(request, id);
         return new ApiResponseBody("coupon updated successfully", true);
     }
 
-    @PostMapping("/validateCoupon")
+    @PostMapping("/validate")
     @PreAuthorize("hasRole('USER')")
     ApiResponseBody validateCoupon(@RequestBody CouponRedeemRequestDTO request) {
         CouponValidateResponseDTO result = couponService.validateCoupon(request);

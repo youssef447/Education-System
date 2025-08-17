@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderEntity extends AuditBaseEntity<Long> {
+public class OrderEntity extends AuditBaseEntity {
     @Column(nullable = false)
     private int quantity;
 

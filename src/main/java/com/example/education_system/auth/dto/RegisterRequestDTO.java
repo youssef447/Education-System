@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRequestDTO {
+public class RegisterRequestDTO {
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;
@@ -19,5 +19,4 @@ public class UserRequestDTO {
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
-    private String profileUrl;
 }

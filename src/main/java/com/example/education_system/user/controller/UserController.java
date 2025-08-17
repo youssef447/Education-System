@@ -1,7 +1,7 @@
 package com.example.education_system.user.controller;
 
 
-import com.example.education_system.auth.dto.UserRequestDTO;
+import com.example.education_system.auth.dto.RegisterRequestDTO;
 import com.example.education_system.config.response.ApiResponseBody;
 import com.example.education_system.config.security.annotation.IsUserOwner;
 import com.example.education_system.user.dto.UserResponseDto;
@@ -22,22 +22,22 @@ public class UserController {
     UserService userservice;
 
 
-    @PostMapping("/update")
+    @PutMapping
     @IsUserOwner
-    ApiResponseBody updateUser(@RequestParam Long id, @Valid @ModelAttribute UserRequestDTO request,
+    ApiResponseBody updateUser(@RequestParam Long id, @Valid @ModelAttribute RegisterRequestDTO request,
                                @RequestParam(value = "image", required = false) MultipartFile file) {
         UserResponseDto result = userservice.updateUser(id, request, file);
         return new ApiResponseBody("user updated successfully", result, true);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @IsUserOwner
     ApiResponseBody deleteUser(@PathVariable Long id) {
         userservice.deleteUser(id);
         return new ApiResponseBody("user deleted successfully", true);
     }
 
-    @PostMapping("/updateRoles")
+    @PatchMapping("/updateRoles")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody updateUserRoles(@RequestParam Long id, @RequestBody Set<UserRole> roles
     ) {

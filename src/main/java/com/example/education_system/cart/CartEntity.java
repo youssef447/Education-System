@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CartEntity extends AuditBaseEntity<Long> {
+public class CartEntity extends AuditBaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)

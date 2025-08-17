@@ -13,20 +13,22 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RestController("/courses")
+@RestController
+@RequestMapping("/course")
 public class CourseController {
 
     private final CourseService courseService;
 
-    @GetMapping("/getAll")
+    @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody getAllCourses() {
-        List<CourseResponseDto> result = courseService.getAllCourses();
+    ApiResponseBody getAllCourses(@RequestParam Integer page,
+                                  @RequestParam Integer size) {
+        Object result = courseService.getAllCourses(page, size);
         return new ApiResponseBody("courses fetched successfully", result, true);
     }
 
     //, consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    @PostMapping("/add")
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody addCourse(@Valid @ModelAttribute CourseRequestDto request
     ) {
@@ -34,14 +36,14 @@ public class CourseController {
         return new ApiResponseBody("course added successfully", result, true);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody deleteCourse(@PathVariable Long id) {
         courseService.deleteCourse(id);
         return new ApiResponseBody("course deleted successfully", true);
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody updateCourse(@PathVariable Long id, @Valid @ModelAttribute CourseRequestDto request
     ) {

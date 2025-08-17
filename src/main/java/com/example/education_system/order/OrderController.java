@@ -13,21 +13,21 @@ public class OrderController {
     private final OrderService orderService;
 
 
-    @PostMapping(value = "/add")
+    @PostMapping
     @PreAuthorize("hasRole('USER')")
     ApiResponseBody add(@ModelAttribute OrderRequestDTO request
     ) {
         return new ApiResponseBody("order added successfully", true);
     }
 
-    @PostMapping(value = "/update")
+    @PutMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     ApiResponseBody update(@ModelAttribute OrderRequestDTO request
     ) {
         return new ApiResponseBody("order updated successfully", true);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     ApiResponseBody delete(@PathVariable Long id) {
         return new ApiResponseBody("order deleted successfully", true);

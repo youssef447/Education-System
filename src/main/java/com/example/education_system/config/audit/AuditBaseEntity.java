@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @Setter
 @EntityListeners(AuditingEntityListener.class)
 
-public abstract class AuditBaseEntity<ID> {
+public abstract class AuditBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private ID id;
+    private Long id;
 
     @CreatedDate
     private LocalDateTime createdDate;

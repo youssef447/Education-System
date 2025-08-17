@@ -15,7 +15,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table(name = "enrollments")
-public class EnrollmentEntity extends AuditBaseEntity<Long> {
+public class EnrollmentEntity extends AuditBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "student must be provided")
     @JoinColumn(nullable = false)

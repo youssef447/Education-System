@@ -2,39 +2,47 @@ package com.example.education_system.course_lesson;
 
 import com.example.education_system.config.response.ApiResponseBody;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
 
 @RestController
-@RequestMapping("/lessons")
 @RequiredArgsConstructor
 public class LessonController {
+
     private final LessonService lessonService;
 
-    @GetMapping("/getAll")
-    ApiResponseBody getAll() {
-        return new ApiResponseBody("lessons fetched successfully", true);
-    }
-
-    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping("/classes/{classId}/lessons")
     @PreAuthorize("hasRole('TEACHER')")
-    ApiResponseBody add(@ModelAttribute LessonRequestDTO request
-    ) {
-        return new ApiResponseBody("lesson added successfully", true);
+    public ApiResponseBody add(@PathVariable Long classId,
+                               @ModelAttribute LessonRequestDTO request) {
+        LessonResponseDTO data = lessonService.add(classId, request);
+        return new ApiResponseBody("Lesson added successfully", data, true);
     }
 
-    @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAnyRole('TEACHER','ADMIN')")
-    ApiResponseBody update(@ModelAttribute LessonRequestDTO request
+    @GetMapping("/classes/{classId}/lessons")
+    public ApiResponseBody getAll(
+            @PathVariable Long classId,
+            @RequestParam Integer page,
+            @RequestParam Integer size
     ) {
-        return new ApiResponseBody("lesson updated successfully", true);
+        Object data = lessonService.getAll(classId, page, size);
+        return new ApiResponseBody("Lessons fetched successfully", data, true);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PutMapping("/lessons/{lessonId}")
     @PreAuthorize("hasAnyRole('TEACHER','ADMIN')")
-    ApiResponseBody delete(@PathVariable Long id) {
-        return new ApiResponseBody("lesson deleted successfully", true);
+    public ApiResponseBody update(@PathVariable Long lessonId,
+                                  @ModelAttribute LessonRequestDTO request) {
+        LessonResponseDTO data = lessonService.update(lessonId, request);
+        return new ApiResponseBody("Lesson updated successfully", data, true);
+    }
+
+    @DeleteMapping("/lessons/{lessonId}")
+    @PreAuthorize("hasAnyRole('TEACHER','ADMIN')")
+    public ApiResponseBody delete(@PathVariable Long lessonId) {
+        lessonService.delete(lessonId);
+        return new ApiResponseBody("Lesson deleted successfully", true);
     }
 }

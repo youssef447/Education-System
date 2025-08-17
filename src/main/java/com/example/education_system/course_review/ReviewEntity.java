@@ -17,7 +17,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class ReviewEntity extends AuditBaseEntity<Long> {
+public class ReviewEntity extends AuditBaseEntity {
 
 
     @OneToOne

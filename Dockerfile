@@ -12,8 +12,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 VOLUME /tmp
 
-# Install bash for the entrypoint script
-# RUN apk add --no-cache bash
+
 
 COPY --from=build /app/target/*.jar app.jar
 

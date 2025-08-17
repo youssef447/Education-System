@@ -12,12 +12,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 
-@RestController("/entrollments")
+@RestController("/entrollment")
 public class EnrollmentController {
 
     private final EnrollmentService enrollmentService;
 
-    @GetMapping("/get")
+    @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody getAllEnrollments() {
         List<EnrollmentResponseDto> result = enrollmentService.getAllEnrollments();

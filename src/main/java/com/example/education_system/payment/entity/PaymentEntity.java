@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "payments")
-public class PaymentEntity extends AuditBaseEntity<Long> {
+public class PaymentEntity extends AuditBaseEntity {
     @Column(nullable = false)
     private String transactionId;
     @NotNull(message = "Amount is required")

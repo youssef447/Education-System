@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Table(name = "users")
-public class UserEntity extends AuditBaseEntity<Long> implements UserDetails {
+public class UserEntity extends AuditBaseEntity implements UserDetails {
 
 
     @Column(unique = true, nullable = false)

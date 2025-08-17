@@ -9,50 +9,49 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping("/review")
 @RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/add")
+    @PostMapping
     ResponseEntity<Map<String, String>> add(@RequestBody ReviewNewRequestDTO request) {
         reviewService.add(request);
-        return ResponseEntity.ok().body(Map.of("message", "review submitted successfully"));
+        return ResponseEntity.ok(Map.of("message", "review submitted successfully"));
     }
 
-
-    @PostMapping("/update")
-    ResponseEntity<Map<String, String>> update(@RequestBody ReviewUpdateRequestDTO request, @RequestParam Long id) {
+    @PutMapping("/{id}")
+    ResponseEntity<Map<String, String>> update(@RequestBody ReviewUpdateRequestDTO request, @PathVariable Long id) {
         reviewService.update(request, id);
-        return ResponseEntity.ok().body(Map.of("message", "review updated successfully"));
+        return ResponseEntity.ok(Map.of("message", "review updated successfully"));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    ResponseEntity<Map<String, String>> delete(@RequestParam Long id) {
+    ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         reviewService.delete(id);
-        return ResponseEntity.ok().body(Map.of("message", "review deleted successfully"));
+        return ResponseEntity.ok(Map.of("message", "review deleted successfully"));
     }
 
-    @PostMapping("/getAll")
+    @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     ResponseEntity<Map<String, List<ReviewResponseDTO>>> getAll() {
         List<ReviewResponseDTO> reviews = reviewService.getAll();
-        return ResponseEntity.ok().body(Map.of("data", reviews));
+        return ResponseEntity.ok(Map.of("data", reviews));
     }
 
-    @PostMapping("/get")
+    @GetMapping("/course/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    ResponseEntity<Map<String, List<ReviewResponseDTO>>> getByCourse(@RequestParam Long id) {
+    ResponseEntity<Map<String, List<ReviewResponseDTO>>> getByCourse(@PathVariable Long id) {
         List<ReviewResponseDTO> reviews = reviewService.getByCourse(id);
-        return ResponseEntity.ok().body(Map.of("data", reviews));
+        return ResponseEntity.ok(Map.of("data", reviews));
     }
 
-    @PostMapping("/approve")
+    @PatchMapping("/{id}/approve")
     @PreAuthorize("hasAuthority('ADMIN')")
-    ResponseEntity<Map<String, String>> approveReview(@RequestParam Long id, @RequestParam boolean approve) {
+    ResponseEntity<Map<String, String>> approveReview(@PathVariable Long id, @RequestParam boolean approve) {
         reviewService.approveReview(id, approve);
-        return ResponseEntity.ok().body(Map.of("message", "review approval updated successfully"));
+        return ResponseEntity.ok(Map.of("message", "review approval updated successfully"));
     }
 }
