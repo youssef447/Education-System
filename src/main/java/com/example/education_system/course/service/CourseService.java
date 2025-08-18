@@ -6,12 +6,12 @@ import com.example.education_system.config.exceptions.classes.CourseCodeAlreadyE
 import com.example.education_system.config.exceptions.classes.CourseNotFoundException;
 import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.config.services.FileStorageService;
+import com.example.education_system.config.services.FileValidationService;
 import com.example.education_system.course.dto.CourseRequestDto;
 import com.example.education_system.course.dto.CourseResponseDto;
 import com.example.education_system.course.entity.CourseEntity;
 import com.example.education_system.course.mapper.CourseMapper;
 import com.example.education_system.course.repository.CourseRepository;
-import com.example.education_system.course_lesson.LessonEntity;
 import com.example.education_system.user.entity.UserEntity;
 import com.example.education_system.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -55,7 +55,7 @@ public class CourseService {
         CourseEntity entity = courseMapper.toEntity(request);
         MultipartFile imageFile = request.getThumbnailFile();
         if (imageFile != null && !imageFile.isEmpty()) {
-            FileInfo thumbnailFile = fileStorageService.store(imageFile);
+            FileInfo thumbnailFile = fileStorageService.store(imageFile,FileValidationService.IMAGE_TYPES);
             entity.setThumbnailFile(thumbnailFile);
         }
         CourseEntity course = courseRepository.save(entity);
@@ -80,7 +80,7 @@ public class CourseService {
 
         MultipartFile imageFile = request.getThumbnailFile();
         if (imageFile != null && !imageFile.isEmpty()) {
-            FileInfo thumbnailFile = fileStorageService.store(imageFile);
+            FileInfo thumbnailFile = fileStorageService.store(imageFile, FileValidationService.IMAGE_TYPES);
             existing.setThumbnailFile(thumbnailFile);
         }
 

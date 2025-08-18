@@ -4,6 +4,7 @@ import com.example.education_system.config.exceptions.classes.ClassNotFound;
 import com.example.education_system.config.exceptions.classes.LessonNotFoundException;
 import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.config.services.FileStorageService;
+import com.example.education_system.config.services.FileValidationService;
 import com.example.education_system.course_class.ClassEntity;
 import com.example.education_system.course_class.ClassRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +31,20 @@ public class LessonService {
     LessonResponseDTO add(Long classId, LessonRequestDTO request) {
         ClassEntity classEntity = classRepository.findById(classId)
                 .orElseThrow(ClassNotFound::new);
-        LessonEntity entity = mapper.toEntity(request);
-        entity.setClassEntity(classEntity);
-        LessonEntity persisted = lessonRepository.save(entity);
+        LessonEntity lessonEntity = mapper.toEntity(request);
+        lessonEntity.setClassEntity(classEntity);
+        MultipartFile file = request.getContentFile();
+        if (file != null && !file.isEmpty()) {
+            // delete the old file from storage
+            Optional.ofNullable(lessonEntity.getFileInfo())
+                    .ifPresent(f -> fileStorageService.delete(f.publicId()));
+
+            FileInfo fileInfo = fileStorageService.store(file, FileValidationService.LESSON_FILE_TYPES);
+            lessonEntity.setFileInfo(fileInfo);
+        }
+
+
+        LessonEntity persisted = lessonRepository.save(lessonEntity);
         return mapper.toResponseDto(persisted);
 
     }
@@ -73,7 +85,7 @@ public class LessonService {
             Optional.ofNullable(entity.getFileInfo())
                     .ifPresent(f -> fileStorageService.delete(f.publicId()));
 
-            FileInfo fileInfo = fileStorageService.store(file);
+            FileInfo fileInfo = fileStorageService.store(file, FileValidationService.LESSON_FILE_TYPES);
             entity.setFileInfo(fileInfo);
         }
 

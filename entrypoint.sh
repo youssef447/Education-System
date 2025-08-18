@@ -1,6 +1,5 @@
 #!/bin/sh
 
-echo "⏳ Reading Docker secrets..."
 
 # Helper function to trim \r\n from secrets
 read_secret() {
@@ -25,7 +24,6 @@ export GOOGLE_CLIENT_ID=$(read_secret GOOGLE_CLIENT_ID)
 export GOOGLE_CLIENT_SECRET=$(read_secret GOOGLE_CLIENT_SECRET)
 export GOOGLE_SCOPES=$(read_secret GOOGLE_SCOPES)
 
-echo "✅ All secrets loaded as environment variables"
 
 # Start Spring Boot app
 exec java -jar app.jar

@@ -4,6 +4,7 @@ package com.example.education_system.user.service;
 import com.example.education_system.auth.dto.RegisterRequestDTO;
 import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.config.services.FileStorageService;
+import com.example.education_system.config.services.FileValidationService;
 import com.example.education_system.user.dto.UserResponseDto;
 import com.example.education_system.user.entity.UserEntity;
 import com.example.education_system.user.entity.UserRole;
@@ -51,15 +52,14 @@ public class UserService {
         // fields
         existing.setEmail(request.getEmail());
         existing.setPassword(passwordEncoder.encode(request.getPassword()));
-        if (imageFile != null && !imageFile.isEmpty()) {
-            FileInfo fileInfo = fileStorageService.store(imageFile);
+        if (imageFile != null && !imageFile.isEmpty())
+            fileStorageService.delete(existing.getImageFile().publicId());
+        {
+            FileInfo fileInfo = fileStorageService.store(imageFile, FileValidationService.IMAGE_TYPES);
             existing.setImageFile(fileInfo);
         }
 
-        if (imageFile == null && request.getProfileUrl() == null) {
-            fileStorageService.delete(existing.getImageFile().publicId());
-            existing.setImageFile(null);//mapper
-        }
+
         UserEntity updatedUser = userRepository.save(existing);
         return userMapper.toResponseDto(updatedUser);
 

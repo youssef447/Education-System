@@ -5,6 +5,7 @@ import com.example.education_system.config.exceptions.classes.CategoryNotFound;
 
 import com.example.education_system.config.services.FileInfo;
 import com.example.education_system.config.services.FileStorageService;
+import com.example.education_system.config.services.FileValidationService;
 import com.example.education_system.course.dto.CourseResponseDto;
 import com.example.education_system.course.entity.CourseEntity;
 import com.example.education_system.course.mapper.CourseMapper;
@@ -36,7 +37,7 @@ public class CategoryService {
         CategoryEntity entity = categoryMapper.toEntity(request);
         MultipartFile imageFile = request.getImageFile();
         if (imageFile != null && !imageFile.isEmpty()) {
-            FileInfo iconFile = fileStorageService.store(imageFile);
+            FileInfo iconFile = fileStorageService.store(imageFile, FileValidationService.IMAGE_TYPES);
             entity.setIconFile(iconFile);
         }
         CategoryEntity persisted = categoryRepository.save(entity);
@@ -59,7 +60,7 @@ public class CategoryService {
         existing.setName(request.getName());
         MultipartFile imageFile = request.getImageFile();
         if (imageFile != null && !imageFile.isEmpty()) {
-            FileInfo iconFile = fileStorageService.store(imageFile);
+            FileInfo iconFile = fileStorageService.store(imageFile, FileValidationService.IMAGE_TYPES);
             existing.setIconFile(iconFile);
         }
 

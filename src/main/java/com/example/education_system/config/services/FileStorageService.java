@@ -16,11 +16,12 @@ import java.util.Set;
 public class FileStorageService {
 
 
-
     private final Cloudinary cloudinary;
+    private final FileValidationService fileValidationService;
 
-    public FileInfo store(MultipartFile file) {
-        validateFileType(file);
+    public FileInfo store(MultipartFile file,Set<String> allowedTypes) {
+        fileValidationService.validateFileType(file, allowedTypes);
+
 
 
         try {
@@ -45,13 +46,16 @@ public class FileStorageService {
     }
 
 
-    private void validateFileType(MultipartFile file) {
+    private void validateFileType(MultipartFile file,String providedType) {
         String contentType = file.getContentType();
-        if (contentType == null ||
-                !ALLOWED_TYPES.contains(contentType)) {
+        if (!providedType.equals(contentType)) {
             throw new FileUploadException("File type not allowed");
         }
     }
+
+
+
+
 
     private String formatSize(long bytes) {
         long KB = 1024L;

@@ -1,6 +1,6 @@
 services:
-  app:
-    image: edu_sys
+  backend:
+    image: backend-image:latest
     ports:
       - "8090:8080"
     depends_on:
