@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 public class CartItemEntity extends AuditBaseEntity {
     @JoinColumn(nullable = false)
 
-    private BigDecimal currentPrice;
+    private BigDecimal unitPrice;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

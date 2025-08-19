@@ -1,5 +1,7 @@
 package com.example.education_system.order;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,6 +14,9 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
+    List<OrderEntity> findByUserId(Long userId);
+
+    Page<OrderEntity> findByUserId(Long userId, Pageable pageable);
     Long countByStatus(OrderEntity.OrderStatus status);
 
 

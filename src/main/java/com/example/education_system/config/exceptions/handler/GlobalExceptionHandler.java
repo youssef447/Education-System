@@ -94,6 +94,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(statusCode).body(response);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedErors(AccessDeniedException ex) {
+        int statusCode = HttpStatus.SC_FORBIDDEN;
+        ApiResponseBody response = new ApiResponseBody(ex.getMessage(), false);
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
     @ExceptionHandler(NoEventFoundException.class)
     public ResponseEntity<?> handleNoEventErrors(NoEventFoundException ex) {
         int statusCode = HttpStatus.SC_NOT_FOUND;

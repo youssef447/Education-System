@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 @Entity
@@ -18,13 +19,15 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderEntity extends AuditBaseEntity {
     @Column(nullable = false)
-    private int quantity;
+    private int itemCount;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.PENDING;
 
     @Column(nullable = false)
     private BigDecimal totalPrice;
+    @Column(nullable = false)
+    private CurrencyEnum currency;
 
 
     /// RELATIONS
@@ -36,12 +39,24 @@ public class OrderEntity extends AuditBaseEntity {
     private List<OrderItemEntity> items = new ArrayList<>();
 
 
+    @PrePersist
+    @PreUpdate
+    public void calculateTotalPrice() {
+        itemCount = items.size();
 
-
+        this.totalPrice = items.stream()
+                .map(OrderItemEntity::getTotalPrice
+                )
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 
 
     public enum OrderStatus {
         PENDING, PAID
+    }
+
+    public enum CurrencyEnum {
+        USD, EGP
     }
 
 }
