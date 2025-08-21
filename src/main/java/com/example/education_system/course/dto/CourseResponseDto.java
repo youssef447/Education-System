@@ -6,6 +6,7 @@ import com.example.education_system.enrollment.dto.EnrollmentResponseDto;
 import com.example.education_system.user.dto.UserResponseDto;
 
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,5 @@ public record CourseResponseDto(
         LocalDateTime createdAt,
         // Nested DTOs for relationships
         List<UserResponseDto> instructors,
-        Set<EnrollmentResponseDto> enrollments,
-        List<CategoryResponseDto> categories) {
+        List<CategoryResponseDto> categories) implements Serializable {
 }

@@ -5,11 +5,12 @@ import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
 @Setter
-public class UserResponseDto {
+public class UserResponseDto implements Serializable {
     private String email;
     private  String username;
     private  String profileUrl;
