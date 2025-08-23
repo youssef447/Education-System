@@ -6,6 +6,7 @@ import com.example.education_system.course.dto.CourseResponseDto;
 import com.example.education_system.course.service.CourseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,16 +22,16 @@ public class CourseController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody getAllCourses(@RequestParam Integer page,
-                                  @RequestParam Integer size) {
-        Object result = courseService.getAllCourses(page, size);
+    ApiResponseBody getAllCourses(@RequestParam(required = false) Integer page,
+                                  @RequestParam(required = false) Integer size) {
+        Page<CourseResponseDto> result = courseService.getAllCourses(page, size);
         return new ApiResponseBody("courses fetched successfully", result, true);
     }
 
     //, consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponseBody addCourse(@Valid @ModelAttribute CourseRequestDto request
+    ApiResponseBody addCourse( @ModelAttribute CourseRequestDto request
     ) {
         CourseResponseDto result = courseService.addCourse(request);
         return new ApiResponseBody("course added successfully", result, true);

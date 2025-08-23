@@ -3,9 +3,9 @@ package com.example.education_system.category;
 import com.example.education_system.config.exceptions.classes.CategoryAlreadyExistsException;
 import com.example.education_system.config.exceptions.classes.CategoryNotFound;
 
-import com.example.education_system.config.services.FileInfo;
-import com.example.education_system.config.services.FileStorageService;
-import com.example.education_system.config.services.FileValidationService;
+import com.example.education_system.config.files.FileInfo;
+import com.example.education_system.config.files.FileStorageService;
+import com.example.education_system.config.files.FileValidationService;
 import com.example.education_system.course.dto.CourseResponseDto;
 import com.example.education_system.course.entity.CourseEntity;
 import com.example.education_system.course.mapper.CourseMapper;

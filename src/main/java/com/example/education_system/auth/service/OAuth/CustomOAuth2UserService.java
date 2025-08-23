@@ -2,7 +2,7 @@ package com.example.education_system.auth.service.OAuth;
 
 import com.example.education_system.auth.service.OAuth.info.OAuth2UserInfo;
 import com.example.education_system.auth.service.OAuth.info.OAuth2UserInfoFactory;
-import com.example.education_system.config.services.FileInfo;
+import com.example.education_system.config.files.FileInfo;
 import com.example.education_system.user.entity.UserEntity;
 import com.example.education_system.user.entity.UserRole;
 import com.example.education_system.user.repository.UserRepository;

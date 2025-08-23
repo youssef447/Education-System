@@ -1,4 +1,4 @@
-package com.example.education_system.config.services;
+package com.example.education_system.config.files;
 
 import com.example.education_system.config.exceptions.classes.FileUploadException;
 import org.springframework.stereotype.Service;

@@ -41,7 +41,7 @@ public class ReportPdfGeneratorService {
         String[] headers = {"Category Name", "Quantity", "Total Revenue"};
         List<String[]> rows = data.stream().map(item ->
                 new String[]{
-                        item.category().getName(),
+                        item.category().name(),
                         String.valueOf(item.totalQuantity()),
                         String.format("%.2f", item.totalRevenue())
                 }).toList();

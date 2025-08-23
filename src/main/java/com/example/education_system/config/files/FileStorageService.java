@@ -1,4 +1,4 @@
-package com.example.education_system.config.services;
+package com.example.education_system.config.files;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

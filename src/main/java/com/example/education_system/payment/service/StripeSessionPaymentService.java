@@ -6,7 +6,6 @@ import com.example.education_system.config.exceptions.classes.CouponNotFound;
 import com.example.education_system.config.exceptions.classes.OrderNotFoundException;
 import com.example.education_system.course_coupon.entity.CouponEntity;
 import com.example.education_system.course_coupon.repository.CouponRepository;
-import com.example.education_system.course_coupon.service.CouponService;
 import com.example.education_system.order.OrderEntity;
 import com.example.education_system.order.OrderRepository;
 import com.example.education_system.payment.dto.PaymentRequestDto;
@@ -26,7 +25,6 @@ import java.math.RoundingMode;
 @RequiredArgsConstructor
 public class StripeSessionPaymentService implements PaymentService {
     private final OrderRepository orderRepository;
-    private final CouponService couponService;
     private final CouponRepository couponRepository;
 
 

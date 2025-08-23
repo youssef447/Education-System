@@ -2,7 +2,7 @@ package com.example.education_system.course_lesson;
 
 
 import com.example.education_system.config.audit.AuditBaseEntity;
-import com.example.education_system.config.services.FileInfo;
+import com.example.education_system.config.files.FileInfo;
 import com.example.education_system.course_class.ClassEntity;
 import com.example.education_system.user.entity.UserEntity;
 import jakarta.persistence.*;

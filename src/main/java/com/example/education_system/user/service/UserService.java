@@ -2,9 +2,9 @@ package com.example.education_system.user.service;
 
 
 import com.example.education_system.auth.dto.RegisterRequestDTO;
-import com.example.education_system.config.services.FileInfo;
-import com.example.education_system.config.services.FileStorageService;
-import com.example.education_system.config.services.FileValidationService;
+import com.example.education_system.config.files.FileInfo;
+import com.example.education_system.config.files.FileStorageService;
+import com.example.education_system.config.files.FileValidationService;
 import com.example.education_system.user.dto.UserResponseDto;
 import com.example.education_system.user.entity.UserEntity;
 import com.example.education_system.user.entity.UserRole;

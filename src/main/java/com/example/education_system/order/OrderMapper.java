@@ -12,7 +12,7 @@ public interface OrderMapper {
 
 
     @Mapping( target = "userId",source = "user.id")
-    @Mapping( target = "currency",source = "currency.name")
+    @Mapping( target = "currency",source = "currency")
     OrderResponseDTO toResponseDto(OrderEntity entity);
 
     List<OrderResponseDTO> toListDTO(List<OrderEntity> entity);

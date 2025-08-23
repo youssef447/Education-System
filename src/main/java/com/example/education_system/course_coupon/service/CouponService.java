@@ -1,7 +1,8 @@
 package com.example.education_system.course_coupon.service;
 
+import com.example.education_system.email.EmailMessageDTO;
 import com.example.education_system.config.exceptions.classes.*;
-import com.example.education_system.config.services.EmailService;
+import com.example.education_system.email.EmailService;
 import com.example.education_system.course.entity.CourseEntity;
 import com.example.education_system.course.repository.CourseRepository;
 import com.example.education_system.course_coupon.DTOS.*;
@@ -77,7 +78,9 @@ public class CouponService {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")) + "\n\n" +
                 "Enjoy your shopping!";
 
-        emailService.sendEmail(request.getEmail(), "Coupon Discount", message);
+        EmailMessageDTO emailMessageDTO = new EmailMessageDTO(request.getEmail(), "Coupon Discount", message);
+
+        emailService.sendEmail(emailMessageDTO);
     }
 
     public void update(@Valid CouponRequestDTO request, Long id) {
