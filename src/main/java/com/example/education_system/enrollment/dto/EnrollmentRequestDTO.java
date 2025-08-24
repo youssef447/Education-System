@@ -6,14 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EnrollmentRequestDto {
+public class EnrollmentRequestDTO {
     @NotBlank(message = "course id is required")
     Long courseId;
     @NotBlank(message = "student id is required")
     Long studentId;
-
-
-
-
 
 }

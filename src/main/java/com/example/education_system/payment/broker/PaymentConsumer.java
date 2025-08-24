@@ -1,6 +1,8 @@
 package com.example.education_system.payment.broker;
 
 import com.example.education_system.config.exceptions.classes.OrderNotFoundException;
+import com.example.education_system.enrollment.entity.EnrollmentEntity;
+import com.example.education_system.enrollment.repository.EnrollmentRepository;
 import com.example.education_system.order.OrderEntity;
 import com.example.education_system.order.OrderRepository;
 import com.example.education_system.payment.entity.Currency;
@@ -20,16 +22,18 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 public class PaymentConsumer {
+    private final UserService userService;
 
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
-    private final UserService userService;
+    private final EnrollmentRepository enrollmentRepository;
 
     @RabbitListener(queues = "${rabbitmq.queue.payment}")
     @Transactional
     public void consume(PaymentIntent intent) {
         saveOrder(intent);
         savePayment(intent);
+        enrollStudent(intent);
     }
 
     private void savePayment(PaymentIntent intent) {
@@ -53,6 +57,21 @@ public class PaymentConsumer {
         order.setTotalPrice(BigDecimal.valueOf(Long.parseLong(price)));
         orderRepository.save(order);
 
+    }
+
+    private void enrollStudent(PaymentIntent intent) {
+        UserEntity user = userService.getCurrentUser();
+        Long orderId = Long.parseLong(intent.getMetadata().get("order_id"));
+        OrderEntity order = getCurrentOrder(orderId);
+
+        order.getItems().forEach(item -> {
+            EnrollmentEntity enrollment = EnrollmentEntity.builder()
+                    .student(user)
+                    .course(item.getCourse())
+                    .build();
+
+            enrollmentRepository.save(enrollment);
+        });
     }
 
 

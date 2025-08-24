@@ -32,6 +32,8 @@ public class StripeSessionPaymentService implements PaymentService {
         OrderEntity order = orderRepository.findById(paymentRequest.orderId()).
                 orElseThrow(OrderNotFoundException::new);
 
+        long totalQuantity=order.getItemCount();
+
         BigDecimal totalPrice = order.getTotalPrice();
 
         // Apply Coupon
@@ -59,7 +61,7 @@ public class StripeSessionPaymentService implements PaymentService {
         SessionCreateParams.LineItem lineItem =
                 SessionCreateParams
                         .LineItem.builder()
-                        //.setQuantity(paymentRequest.quantity())
+                       .setQuantity(totalQuantity)
                         .setPriceData(priceData)
                         .build();
 

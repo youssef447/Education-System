@@ -48,7 +48,7 @@ public class WebhookService {
 
         }
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("webhook processed successfully");
     }
 
 

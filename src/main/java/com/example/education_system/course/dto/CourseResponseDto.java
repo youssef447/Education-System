@@ -2,14 +2,12 @@ package com.example.education_system.course.dto;
 
 
 import com.example.education_system.category.CategoryResponseDto;
-import com.example.education_system.enrollment.dto.EnrollmentResponseDto;
 import com.example.education_system.user.dto.UserResponseDto;
 
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 
 public record CourseResponseDto(
