@@ -1,5 +1,2 @@
 ### ERD
-<img width="2952" height="1892" alt="EDUCATION-SYSTEM" src="https://github.com/user-attachments/assets/51e64f2d-f8b9-423f-8ede-f5fd7cac0027" />
-
-### Database Documentation
-https://dbdocs.io/youssef.ashraf380/Education-System-API
+<img width="3000" height="2040" alt="Untitled" src="https://github.com/user-attachments/assets/eebe01ed-3c84-4c2a-b596-4fd59447c0da" />
