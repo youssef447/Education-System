@@ -16,13 +16,17 @@ public class AdminSeeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final String email;
+    private final String username;
     private final String password;
 
     AdminSeeder(UserRepository userRepository,
                 PasswordEncoder passwordEncoder,
-                @Value("${admin.email}") String email, @Value("${admin.password}") String password) {
+                @Value("${admin.email}") String email,
+                @Value("${admin.username}") String username,
+                @Value("${admin.password}") String password) {
         this.userRepository = userRepository;
         this.email = email;
+        this.username = username;
         this.password = password;
         this.passwordEncoder = passwordEncoder;
     }
@@ -32,6 +36,7 @@ public class AdminSeeder implements CommandLineRunner {
         if (!userRepository.existsByEmail(email)) {
             UserEntity user = new UserEntity();
             user.setEmail(email);
+            user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));
             user.setRoles(Set.of(UserRole.ROLE_ADMIN));
 
