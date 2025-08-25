@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -49,7 +50,7 @@ public class LessonService {
 
     }
 
-    Object getAll(Long classId, Integer page, Integer size) {
+    List<LessonResponseDTO> getAll(Long classId, Integer page, Integer size) {
         if (page == null || size == null) {
             List<LessonEntity> lessons = lessonRepository.findByClassEntityIdOrderByOrderNumber(classId);
             return mapper.toListDTO(lessons);
@@ -57,9 +58,11 @@ public class LessonService {
         } else {
             Pageable pageable = PageRequest.of(page, size, Sort.by("orderNumber").descending());
 
-            Page<LessonEntity> lessons = lessonRepository.findByClassEntityIdOrderByOrderNumber(classId, pageable);
+            Page<LessonEntity> paged = lessonRepository.findByClassEntityIdOrderByOrderNumber(classId, pageable);
 
-            return lessons.map(mapper::toResponseDto);
+            return paged.stream()
+                    .map(mapper::toResponseDto)
+                    .collect(Collectors.toList());
         }
 
     }

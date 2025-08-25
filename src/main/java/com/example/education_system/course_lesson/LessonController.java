@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class LessonController {
             @RequestParam Integer page,
             @RequestParam Integer size
     ) {
-        Object data = lessonService.getAll(classId, page, size);
+        List<LessonResponseDTO> data = lessonService.getAll(classId, page, size);
         return new ApiResponseBody("Lessons fetched successfully", data, true);
     }
 

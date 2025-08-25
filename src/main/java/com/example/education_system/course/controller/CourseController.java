@@ -24,7 +24,7 @@ public class CourseController {
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponseBody getAllCourses(@RequestParam(required = false) Integer page,
                                   @RequestParam(required = false) Integer size) {
-        Page<CourseResponseDto> result = courseService.getAllCourses(page, size);
+        List<CourseResponseDto> result = courseService.getAllCourses(page, size);
         return new ApiResponseBody("courses fetched successfully", result, true);
     }
 

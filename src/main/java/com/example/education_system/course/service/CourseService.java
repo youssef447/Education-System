@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,15 +38,17 @@ public class CourseService {
     private final CourseMapper courseMapper;
 
 
-    public Page<CourseResponseDto> getAllCourses(Integer page, Integer size) {
+    public List<CourseResponseDto> getAllCourses(Integer page, Integer size) {
         if (page == null || size == null) {
             List<CourseEntity> courses = courseRepository.findAll();
-            return new PageImpl<>(courseMapper.toListDto(courses));
+            return courseMapper.toListDto(courses);
 
         }
         Pageable pageable = PageRequest.of(page, size);
-        Page<CourseEntity> courses = courseRepository.findAll(pageable);
-        return courses.map(courseMapper::toDto);
+        Page<CourseEntity> paged = courseRepository.findAll(pageable);
+        return paged.stream()
+                .map(courseMapper::toDto)
+                .collect(Collectors.toList());
 
     }
 
