@@ -60,6 +60,10 @@ public class EnrollmentService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         CourseEntity course = courseRepository.findById(req.getCourseId())
                 .orElseThrow(CourseNotFoundException::new);
+        //check if course isn't free
+        if(course.getPrice().longValue() > 0) {
+            throw new IllegalStateException("course must be purchased");
+        }
 
         boolean exists = enrollmentRepository
                 .existsByStudentIdAndCourseId(student.getId(), course.getId());
@@ -74,10 +78,8 @@ public class EnrollmentService {
                 .build();
 
         enrollmentRepository.save(enrollment);
-        return enrollmentMapper. toDto(enrollment);
+        return enrollmentMapper.toDto(enrollment);
     }
-
-
 
 
     @Transactional
