@@ -10,6 +10,10 @@ export DB_URL=$(read_secret DB_URL)
 export DB_USER=$(read_secret DB_USER)
 export DB_PASS=$(read_secret DB_PASS)
 
+export ADMIN_USERNAME=$(read_secret ADMIN_USERNAME)
+export ADMIN_EMAIL=$(read_secret ADMIN_EMAIL)
+export ADMIN_PASSWORD=$(read_secret ADMIN_PASSWORD)
+
 export CLOUDINARY_CLOUD_NAME=$(read_secret CLOUDINARY_CLOUD_NAME)
 export CLOUDINARY_API_KEY=$(read_secret CLOUDINARY_API_KEY)
 export CLOUDINARY_API_SECRET=$(read_secret CLOUDINARY_API_SECRET)

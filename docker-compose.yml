@@ -15,6 +15,9 @@ services:
       replicas: 1
 
     secrets:
+      - ADMIN_USERNAME
+      - ADMIN_EMAIL
+      - ADMIN_PASSWORD
       - DB_URL
       - DB_USER
       - DB_PASS
@@ -51,6 +54,12 @@ services:
 
 
 secrets:
+  ADMIN_USERNAME:
+    external: true
+  ADMIN_EMAIL:
+    external: true
+  ADMIN_PASSWORD:
+    external: true
   DB_URL:
     external: true
   DB_USER:
